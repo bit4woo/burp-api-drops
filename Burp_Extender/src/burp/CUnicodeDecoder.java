@@ -3,7 +3,7 @@ package burp;
 /**
  * 工具类
  */
-public class CUnicode {
+public class CUnicodeDecoder {
 
 	/**
 	 * unicode解码（unicode编码转中文）
