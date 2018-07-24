@@ -1,83 +1,166 @@
 package burp;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import javax.swing.JMenuItem;
+
 import com.sf.encryption.Encryption;
 
 
-public class BurpExtender implements IBurpExtender, IHttpListener
+public class BurpExtender implements IBurpExtender, IHttpListener,IContextMenuFactory
 {
     private IExtensionHelpers helpers;
 	private IBurpExtenderCallbacks callbacks;
     
-    // implement IBurpExtender
     @Override
     public void registerExtenderCallbacks(IBurpExtenderCallbacks callbacks)
     {
     	this.helpers = callbacks.getHelpers();
 		this.callbacks = callbacks;
-    	callbacks.printOutput("v2");
-        callbacks.setExtensionName("v2"); //插件名称
-        callbacks.registerHttpListener(this); //如果没有注册，下面的processHttpMessage方法是不会生效的。处理请求和响应包的插件，这个应该是必要的
+    	callbacks.printOutput("Para Encrypter For sfsy");
+        callbacks.setExtensionName("Para Encrypter For sfsy");
+        callbacks.registerHttpListener(this); 
+        callbacks.registerContextMenuFactory(this);
     }
 
     @Override
     public void processHttpMessage(int toolFlag,boolean messageIsRequest,IHttpRequestResponse messageInfo)
     {
 		
-    	if (toolFlag == (toolFlag&configEnabledFor())){ //不同的toolflag代表了不同的burp组件 https://portswigger.net/burp/extender/api/constant-values.html#burp.IBurpExtenderCallbacks
-    		if (messageIsRequest){ //对请求包进行处理
-    			String Host = messageInfo.getHttpService().toString();
-    			if (configScope().contains(Host)){//范围判断
-
+    	if (toolFlag == (toolFlag&configEnabledFor())){
+			String Host = getHost(messageInfo);
+			if (configScope().contains(Host)){//范围判断
+	    		if (messageIsRequest){ //对请求包进行处理
     				try {
-    					String body = new String( getBody(messageInfo));
+    					String body = new String( getBody(messageIsRequest,messageInfo));
     					String encryptedValue = URLEncoder.encode(Encryption.encryCode(body));
 
     					
-    					callbacks.printOutput(body+":"+encryptedValue);
+    					callbacks.printOutput(body+":::::"+encryptedValue);
 
     					
 	    				byte[] bodyByte = encryptedValue.getBytes();
-	    				byte[] new_Request = helpers.buildHttpMessage(getHeaders(messageInfo), bodyByte);
+	    				byte[] new_Request = helpers.buildHttpMessage(getHeaders(messageIsRequest,messageInfo), bodyByte);
 	    				messageInfo.setRequest(new_Request);
 	    				
 					} catch (Exception e) {
 						callbacks.printError(e.getMessage());
 					}
-    			}
-    		}
-    		
-    		else{
-    			try{
-    					String body = new String(getBody(messageInfo));
+	    		}else{
+	    			try{
+    					String body = new String(getBody(messageIsRequest,messageInfo));
     					String txtPlain = Encryption.decryCode(URLDecoder.decode(body));
     					
+    					callbacks.printOutput("origin response:");
+    					callbacks.printOutput(body);
+    					callbacks.printOutput("decrypted response:");
+    					callbacks.printOutput(txtPlain);
+    					
 	                    byte[] bodybyte = txtPlain.getBytes();
-	                    messageInfo.setResponse(helpers.buildHttpMessage(getHeaders(messageInfo), bodybyte));
-    				}catch(Exception e){
-    					callbacks.printError(e.getMessage());
-    				}
-    			}   		
+	                    messageInfo.setResponse(helpers.buildHttpMessage(getHeaders(messageIsRequest,messageInfo), bodybyte));
+	    				}catch(Exception e){
+	    					callbacks.printError(e.getMessage());
+	    			}
+	    		}
+			}
     	}
     }
+    
+    
+    @Override
+	public List<JMenuItem> createMenuItems(IContextMenuInvocation invocation)
+	{ //需要在签名注册！！callbacks.registerContextMenuFactory(this);
+	    List<JMenuItem> list = new ArrayList<JMenuItem>();
+    	if(true) {//invocation.getToolFlag() == 16
+    		
+    		JMenuItem menuItem2 = new JMenuItem("xxx decrypto");
+    		menuItem2.addActionListener(new decrypto(invocation));
+    		list.add(menuItem2);
+    		
+        }
+    	return list;
+	}
+    
+    
+	public class decrypto implements ActionListener{
+		private IContextMenuInvocation invocation;
+
+		public decrypto(IContextMenuInvocation invocation) {
+			this.invocation  = invocation;
+		}
+		
+		
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			try {
+				IHttpRequestResponse[] selectedItems = invocation.getSelectedMessages();
+				byte selectedInvocationContext = invocation.getInvocationContext();
+				
+				IHttpRequestResponse messageInfo = selectedItems[0];
+		        	
+	        	byte[] body= getBody(true,messageInfo);
+	        	String clear = Encryption.decryCode(URLDecoder.decode(new String(body)));
+	        	callbacks.printOutput("origin request");
+	        	callbacks.printOutput(new String(body));
+	        	callbacks.printOutput("decrypted request");
+	        	callbacks.printOutput(clear);
+	        	
+	        	byte[] new_body = clear.getBytes();
+	        	
+	        	byte[] newRequestBytes = helpers.buildHttpMessage(getHeaders(true,messageInfo), new_body);
+				
+				if(selectedInvocationContext == IContextMenuInvocation.CONTEXT_MESSAGE_EDITOR_REQUEST) {
+					selectedItems[0].setRequest(newRequestBytes);
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				callbacks.printError(e.getMessage());
+			}
+		}
+	}
+    
+    
+    
+    
+    
+    
 	
-	public  List<String> getHeaders(IHttpRequestResponse messageInfo) {
-		IRequestInfo analyzeRequest = helpers.analyzeRequest(messageInfo);
-		List<String> headers = analyzeRequest.getHeaders();
-		return headers;
+	public  List<String> getHeaders(boolean messageIsRequest,IHttpRequestResponse messageInfo) {
+		if(messageIsRequest) {
+			IRequestInfo analyzeRequest = helpers.analyzeRequest(messageInfo);
+			List<String> headers = analyzeRequest.getHeaders();
+			return headers;
+		}else {
+			IResponseInfo analyzeResponse = helpers.analyzeResponse(messageInfo.getResponse());
+			List<String> headers = analyzeResponse.getHeaders();
+			return headers;
+		}
 	}
 	
-	public byte[] getBody(IHttpRequestResponse messageInfo) {
+	public byte[] getBody(boolean messageIsRequest,IHttpRequestResponse messageInfo) {
+		if(messageIsRequest) {
 			IRequestInfo analyzeRequest = helpers.analyzeRequest(messageInfo);
 			int bodyOffset = analyzeRequest.getBodyOffset();
 			byte[] byte_Request = messageInfo.getRequest();
 			
-			byte[] byte_body = Arrays.copyOfRange(byte_Request, bodyOffset, byte_Request.length-1);
+			byte[] byte_body = Arrays.copyOfRange(byte_Request, bodyOffset, byte_Request.length);//not length-1
 			//String body = new String(byte_body); //byte[] to String
 			return byte_body;
+		}else {
+			IResponseInfo analyzeResponse = helpers.analyzeResponse(messageInfo.getResponse());
+			int bodyOffset = analyzeResponse.getBodyOffset();
+			byte[] byte_Request = messageInfo.getResponse();
+			
+			byte[] byte_body = Arrays.copyOfRange(byte_Request, bodyOffset, byte_Request.length);//not length-1
+			return byte_body;
+		}
 	}
 	
 	public String getShortUrl(IHttpRequestResponse messageInfo) {
@@ -102,8 +185,9 @@ public class BurpExtender implements IBurpExtender, IHttpListener
 		return status;
 	}
 	public List<String> configScope(){
-		List<String> scopes = null;
-		scopes.add("");
+		List<String> scopes = new ArrayList<>();
+		scopes.add("xxx.com");
+		scopes.add("yyy.com");
 		return scopes;
 	}
 
