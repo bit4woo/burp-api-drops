@@ -1,5 +1,5 @@
 //this method include 128_192_256
-//question: base64在AES中是加密后的最后一个步骤，解密前的第一个步骤吗？
+//question: base64锟斤拷AES锟斤拷锟角硷拷锟杰猴拷锟斤拷锟斤拷一锟斤拷锟斤拷锟借，锟斤拷锟斤拷前锟侥碉拷一锟斤拷锟斤拷锟斤拷锟斤拷
 package custom;
 
 import java.security.Key;

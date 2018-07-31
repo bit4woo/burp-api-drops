@@ -4,7 +4,7 @@ import java.util.Map.Entry;
 
 public class MapSort {
 	/**
-	 * Ê¹ÓÃ Map°´key½øÐÐÅÅÐò
+	 * Ê¹ï¿½ï¿½ Mapï¿½ï¿½keyï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 * @param map
 	 * @return
 	 */
@@ -26,7 +26,7 @@ public class MapSort {
 	}
 	
 	/**
-	 * Ê¹ÓÃ Map°´value½øÐÐÅÅÐò
+	 * Ê¹ï¿½ï¿½ Mapï¿½ï¿½valueï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 * @param map
 	 * @return
 	 */
@@ -67,25 +67,25 @@ public class MapSort {
 		map.put("BWNBA", "3wnba");
 		map.put("CNBA", "2nba");
 		map.put("DCBA", "1cba");
-		Map<String, String> resultMap = sortMapByKey(map,"ASCENDING");	//°´Key½øÐÐÉýÐòÅÅÐò
-		System.out.println("key ÉýÐò");
+		Map<String, String> resultMap = sortMapByKey(map,"ASCENDING");	//ï¿½ï¿½Keyï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		System.out.println("key ï¿½ï¿½ï¿½ï¿½");
 		for (Map.Entry<String, String> entry : resultMap.entrySet()) {
 			System.out.println(entry.getKey() + " " + entry.getValue());
 		}
-		System.out.println("key ½µÐò");
-		Map<String, String> resultMap1 = sortMapByKey(map,"DESCENDING");	//°´Key½øÐÐ½µÐòÅÅÐò
+		System.out.println("key ï¿½ï¿½ï¿½ï¿½");
+		Map<String, String> resultMap1 = sortMapByKey(map,"DESCENDING");	//ï¿½ï¿½Keyï¿½ï¿½ï¿½Ð½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		for (Map.Entry<String, String> entry : resultMap1.entrySet()) {
 			System.out.println(entry.getKey() + " " + entry.getValue());
 		}
-		System.out.println("value ÉýÐò");
-		Map<String, String> resultMap2 = sortMapByValue(map, "ASCENDING");	//°´Value½øÐÐÅÅÐò
+		System.out.println("value ï¿½ï¿½ï¿½ï¿½");
+		Map<String, String> resultMap2 = sortMapByValue(map, "ASCENDING");	//ï¿½ï¿½Valueï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		for (Map.Entry<String, String> entry : resultMap2.entrySet()) {
 			//System.out.println(entry.getKey() + " " + entry.getValue());
 			System.out.println(entry);
 		}
 		
-		System.out.println("vale ½µÐò");
-		Map<String, String> resultMap3 = sortMapByValue(map, "DESCENDING");	//°´Value½øÐÐÅÅÐò
+		System.out.println("vale ï¿½ï¿½ï¿½ï¿½");
+		Map<String, String> resultMap3 = sortMapByValue(map, "DESCENDING");	//ï¿½ï¿½Valueï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		for (Map.Entry<String, String> entry : resultMap3.entrySet()) {
 			//System.out.println(entry.getKey() + " " + entry.getValue());
 			System.out.println(entry);
@@ -94,7 +94,7 @@ public class MapSort {
 	}
 }
 
-	//±È½ÏÆ÷Àà
+	//ï¿½È½ï¿½ï¿½ï¿½ï¿½ï¿½
 	class MapKeyComparator implements Comparator<String>{
 		public int compare(String str1, String str2) {
 			return str1.compareTo(str2);
@@ -104,10 +104,10 @@ public class MapSort {
 	
 	class MapKeyComparatorDesc implements Comparator<String>{
 		public int compare(String str1, String str2) {
-			return -(str1.compareTo(str2)); //Í¨¹ý¿ØÖÆ·µ»ØÀ´ÄæÐò
+			return -(str1.compareTo(str2)); //Í¨ï¿½ï¿½ï¿½ï¿½ï¿½Æ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		}
 	}
-	//±È½ÏÆ÷Àà
+	//ï¿½È½ï¿½ï¿½ï¿½ï¿½ï¿½
 	class MapValueComparator implements Comparator<Map.Entry<String, String>> {
 		public int compare(Entry<String, String> me1, Entry<String, String> me2) {
 			return me1.getValue().compareTo(me2.getValue());

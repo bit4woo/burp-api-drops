@@ -11,10 +11,8 @@ import java.util.List;
 
 import javax.swing.JMenuItem;
 
-import com.sf.encryption.Encryption;
 
-
-public class BurpExtender implements IBurpExtender, IHttpListener,IContextMenuFactory
+public class BurpExtender2 implements IBurpExtender, IHttpListener,IContextMenuFactory
 {
     private IExtensionHelpers helpers;
 	private IBurpExtenderCallbacks callbacks;

@@ -1,12 +1,12 @@
 package custom;
 
 /**
- * ¹¤¾ßÀà
+ * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
  */
 public class Unicode {
 
 	/**
-	 * unicode½âÂë£¨unicode±àÂë×ªÖÐÎÄ£©
+	 * unicodeï¿½ï¿½ï¿½ë£¨unicodeï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½Ä£ï¿½
 	 * 
 	 * @param theString
 	 * @return

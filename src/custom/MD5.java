@@ -3,18 +3,18 @@ package custom;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 /*
- * MD5 Ëã·¨
+ * MD5 ï¿½ã·¨
 */
 public class MD5 {
     
-    // È«¾ÖÊý×é
+    // È«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     private final static String[] strDigits = { "0", "1", "2", "3", "4", "5",
             "6", "7", "8", "9", "a", "b", "c", "d", "e", "f" };
 
     public MD5() {
     }
 
-    // ·µ»ØÐÎÊ½ÎªÊý×Ö¸ú×Ö·û´®
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê½Îªï¿½ï¿½ï¿½Ö¸ï¿½ï¿½Ö·ï¿½ï¿½ï¿½
     private static String byteToArrayString(byte bByte) {
         int iRet = bByte;
         // System.out.println("iRet="+iRet);
@@ -26,7 +26,7 @@ public class MD5 {
         return strDigits[iD1] + strDigits[iD2];
     }
 
-    // ·µ»ØÐÎÊ½Ö»ÎªÊý×Ö
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê½Ö»Îªï¿½ï¿½ï¿½ï¿½
     private static String byteToNum(byte bByte) {
         int iRet = bByte;
         System.out.println("iRet1=" + iRet);
@@ -36,7 +36,7 @@ public class MD5 {
         return String.valueOf(iRet);
     }
 
-    // ×ª»»×Ö½ÚÊý×éÎª16½øÖÆ×Ö´®
+    // ×ªï¿½ï¿½ï¿½Ö½ï¿½ï¿½ï¿½ï¿½ï¿½Îª16ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½
     private static String byteToString(byte[] bByte) {
         StringBuffer sBuffer = new StringBuffer();
         for (int i = 0; i < bByte.length; i++) {
@@ -50,7 +50,7 @@ public class MD5 {
         try {
             resultString = new String(strObj);
             MessageDigest md = MessageDigest.getInstance("MD5");
-            // md.digest() ¸Ãº¯Êý·µ»ØÖµÎª´æ·Å¹þÏ£Öµ½á¹ûµÄbyteÊý×é
+            // md.digest() ï¿½Ãºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÖµÎªï¿½ï¿½Å¹ï¿½Ï£Öµï¿½ï¿½ï¿½ï¿½ï¿½byteï¿½ï¿½ï¿½ï¿½
             resultString = byteToString(md.digest(strObj.getBytes()));
         } catch (NoSuchAlgorithmException ex) {
             ex.printStackTrace();

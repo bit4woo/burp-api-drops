@@ -6,12 +6,12 @@ import java.io.PrintWriter;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 /**
- *    BASE64¼ÓÃÜ½âÃÜ
+ *    BASE64ï¿½ï¿½ï¿½Ü½ï¿½ï¿½ï¿½
  *  @author YUANWEi
  */
 public class SunBase64 {
     /** 
-     * BASE64½âÃÜ 
+     * BASE64ï¿½ï¿½ï¿½ï¿½ 
      *  
      * @param key 
      * @return 
@@ -22,7 +22,7 @@ public class SunBase64 {
     }  
        
     /** 
-     * BASE64¼ÓÃÜ 
+     * BASE64ï¿½ï¿½ï¿½ï¿½ 
      *  
      * @param key 
      * @return 

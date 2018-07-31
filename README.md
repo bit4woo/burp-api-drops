@@ -129,7 +129,22 @@ messageInfo.setResponse(helpers.buildHttpMessage(headers, bodybyte));
 
 
 
+### 错误输出方式
 
+```java
+private PrintWriter stdout;
+private PrintWriter stderr;
+
+stdout = new PrintWriter(callbacks.getStdout(), true);
+stderr = new PrintWriter(callbacks.getStderr(), true);
+
+try{
+    xxxx;
+}catch(Exception e){
+    e.printStackTrace(stderr);
+    //这种方式会输出错误栈，利于错误排查
+}
+```
 
 
 

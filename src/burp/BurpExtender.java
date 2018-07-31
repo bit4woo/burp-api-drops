@@ -2,6 +2,16 @@ package burp;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import burp.IBurpExtender;
+import burp.IBurpExtenderCallbacks;
+import burp.IExtensionHelpers;
+import burp.IHttpListener;
+import burp.IHttpRequestResponse;
+import burp.IParameter;
+import burp.IRequestInfo;
+import burp.IResponseInfo;
+
 import java.io.PrintWriter;
 import java.net.URLEncoder;
 import custom.Unicode;
@@ -13,6 +23,7 @@ public class BurpExtender implements IBurpExtender, IHttpListener
     private IExtensionHelpers helpers;
     
     private PrintWriter stdout;
+    private PrintWriter stderr;
     private String ExtenderName = "burp extender api drops by bit4";
     private List<String> paraWhiteList = new ArrayList<String>();
     
@@ -20,6 +31,7 @@ public class BurpExtender implements IBurpExtender, IHttpListener
     public void registerExtenderCallbacks(IBurpExtenderCallbacks callbacks)
     {//IBurpExtender，必须实现的方法
     	stdout = new PrintWriter(callbacks.getStdout(), true);
+    	stderr = new PrintWriter(callbacks.getStderr(), true);
     	callbacks.printOutput(ExtenderName);
     	//stdout.println(ExtenderName);
         this.callbacks = callbacks;
@@ -31,6 +43,20 @@ public class BurpExtender implements IBurpExtender, IHttpListener
     @Override
     public void processHttpMessage(int toolFlag,boolean messageIsRequest,IHttpRequestResponse messageInfo)
     {
+    	/*
+    	try{
+    		Class.forName("burp.j2ee.issues.collaimpl."+"xxx").getConstructor();
+    	}catch(Exception e){
+    	    e.printStackTrace(stderr);
+    	    callbacks.printError("------1---------\n");
+    	    callbacks.printError(e.toString());
+    	    callbacks.printError("-------2--------\n");
+    	    callbacks.printError(e.getMessage());
+    	    callbacks.printError("-------3--------\n");
+    	    callbacks.printError(e.getStackTrace().toString());
+    	    callbacks.printError("-------4--------\n");
+    	}
+    	*/
     	if (toolFlag == (toolFlag&checkEnabledFor(callbacks))){
     		//不同的toolFlag代表了不同的burp组件 https://portswigger.net/burp/extender/api/constant-values.html#burp.IBurpExtenderCallbacks
         	example(messageIsRequest, messageInfo);

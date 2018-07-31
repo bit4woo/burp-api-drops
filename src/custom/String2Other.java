@@ -2,7 +2,7 @@ package custom;
 
 
 import java.util.HashMap;
-import java.util.Map; //util°üº¬ÁËºÜ¶àjavaÖÐ³£ÓÃµÄÊý¾ÝÀàÐÍ¡£
+import java.util.Map; //utilï¿½ï¿½ï¿½ï¿½ï¿½ËºÜ¶ï¿½javaï¿½Ð³ï¿½ï¿½Ãµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¡ï¿½
 import com.alibaba.fastjson.JSONObject;
 
 
@@ -10,9 +10,9 @@ public class String2Other {
 	
 	public static Map<String,String> MapString2Map(String str) {
 	Map<String, String> map = new HashMap<String, String>();
-	//String str = "{20130916110808=µÄ·Ç¹Ù·½´ó¸ç,20140306110813=µÄ¹ã¸æ·Ñ,20140305165435=¶þ¶ñÌ«}";
-	str = str.substring(1, str.length()-1);//È¥µôÇ°ºóÀ¨ºÅ
-	String[] arraydata = str.split(",");//°´¡°£¬¡±½«Æä·ÖÎª×Ö·ûÊý×é
+	//String str = "{20130916110808=ï¿½Ä·Ç¹Ù·ï¿½ï¿½ï¿½ï¿½,20140306110813=ï¿½Ä¹ï¿½ï¿½ï¿½,20140305165435=ï¿½ï¿½ï¿½ï¿½Ì«}";
+	str = str.substring(1, str.length()-1);//È¥ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	String[] arraydata = str.split(",");//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½
 	for (int i = 0; i < arraydata.length; i++) {
 		int j = arraydata[i].indexOf("=");
 		map.put(arraydata[i].substring(0, j-1), arraydata[i].substring(j+1, arraydata[i].length()));
@@ -27,16 +27,16 @@ public class String2Other {
 	}
 	
    /**
-    * json string to map,°üº¬Ç¶Ì×µü´ú´¦Àí¡£
+    * json string to map,ï¿½ï¿½ï¿½ï¿½Ç¶ï¿½×µï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     */
     public static Map<String, Object> JSONOString2Map(String jsonStr){
     	Map<String, Object> map = new HashMap<String, Object>(); 
-        //×îÍâ²ã½âÎö
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         JSONObject json = JSONObject.parseObject(jsonStr);
         for(Object k : json.keySet()){
             Object v = json.get(k); 
-            //Èç¹ûÄÚ²ã»¹ÊÇÊý×éµÄ»°£¬¼ÌÐø½âÎö
-            if(v instanceof JSONObject){//JSONArrayºÍJSONObjectµÄÇø±ð
+            //ï¿½ï¿½ï¿½ï¿½Ú²ã»¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            if(v instanceof JSONObject){//JSONArrayï¿½ï¿½JSONObjectï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             	map.putAll(JSONOString2Map(v.toString()));
             } else {
                 map.put(k.toString(), v);
@@ -47,7 +47,7 @@ public class String2Other {
     
     
 	public static void main(String args[]) throws Exception {
-		String test = "{\"order_id\":\"2011608112040003175\",\"pay_info\":{\"method\":\"GET\",\"params\":{\"amt\":\"1.00\",\"body\":\"×ÛºÏÒâÍâÏÕ\",\"expiry_time\":\"1440\",\"merchant_code\":\"1512000401\",\"notify_info\":\"{}\",\"notify_url\":\"http://14.29.68.179:8092/receive/order/state/zhongan_pay\",\"order_info\":\"xx\",\"order_type\":\"insurance\",\"out_trade_no\":\"2011608112040003175\",\"pay_channel\":\"alipay^wxpay\",\"request_charset\":\"UTF-8\",\"return_url\":\"https://jr.meizu.com/h5/html/insurance/success.html\",\"sign\":\"7f44a0d33abb99309ffd73ea21bba840\",\"sign_type\":\"MD5\",\"src_type\":\"mobile\",\"subject\":\"×ÛºÏÒâÍâÏÕ\"},\"uri\":\"http://cashier.itest.zhongan.com/za-cashier-web/gateway.do\"}}"; 
+		String test = "{\"order_id\":\"2011608112040003175\",\"pay_info\":{\"method\":\"GET\",\"params\":{\"amt\":\"1.00\",\"body\":\"ï¿½Ûºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\",\"expiry_time\":\"1440\",\"merchant_code\":\"1512000401\",\"notify_info\":\"{}\",\"notify_url\":\"http://14.29.68.179:8092/receive/order/state/zhongan_pay\",\"order_info\":\"xx\",\"order_type\":\"insurance\",\"out_trade_no\":\"2011608112040003175\",\"pay_channel\":\"alipay^wxpay\",\"request_charset\":\"UTF-8\",\"return_url\":\"https://jr.meizu.com/h5/html/insurance/success.html\",\"sign\":\"7f44a0d33abb99309ffd73ea21bba840\",\"sign_type\":\"MD5\",\"src_type\":\"mobile\",\"subject\":\"ï¿½Ûºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\"},\"uri\":\"http://cashier.itest.zhongan.com/za-cashier-web/gateway.do\"}}"; 
 		JSONObject jO = JSONString2JSONObj(test);
 		//System.out.println(jO);
 		Map<String,Object> map = JSONOString2Map(test);
