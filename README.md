@@ -95,6 +95,7 @@ byte[] byte_body = body.getBytes();  //String to byte[]
 
 IParameter newPara = helpers.buildParameter(key, Value, para.getType()); //构造新的参数
 new_Request = helpers.updateParameter(new_Request, newPara); //构造新的请求包；关键方法
+//不支持更新Json格式的参数，要注意！！！
 messageInfo.setRequest(new_Request);//设置最终新的请求包
 
 
@@ -125,6 +126,22 @@ String body = resp.substring(bodyOffset);
 //***************************更新********************************
 byte[] bodybyte = newBody.getBytes();
 messageInfo.setResponse(helpers.buildHttpMessage(headers, bodybyte));
+```
+
+
+
+### 扫描插件中更新请求的方法
+
+```java
+
+String paraName = insertionPoint.getInsertionPointName(); //实在就是参数名
+String paraValue = insertionPoint.getBaseValue();//实质就是原始值
+byte[] modifiedRawRequest = insertionPoint.buildRequest(payload.getBytes());//用payload的值【替换】原始的值；
+//insertionPoint可以是参数值、整个body、新增的URL参数、新增的body参数；但没有定义【参数名】的注入点，如果想要用payload替换参数名，就需要自己实现了（通过更改参数的方式），
+
+long sendTime = System.currentTimeMillis();
+IHttpRequestResponse checkRequestResponse = callbacks.makeHttpRequest(
+baseRequestResponse.getHttpService(), modifiedRawRequest);
 ```
 
 
