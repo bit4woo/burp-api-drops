@@ -1,20 +1,14 @@
 package burp;
 
-import java.io.PrintWriter;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 import java.util.Map.Entry;
 
 public class Getter {
 	private static IExtensionHelpers helpers;
-	private static String Header_Spliter = ": ";
-	private PrintWriter stderr = new PrintWriter(BurpExtender.callbacks.getStderr(), true);
-
+	private final static String Header_Spliter = ": ";
 	public Getter(IExtensionHelpers helpers) {
-		Getter.helpers = helpers;
+		this.helpers = helpers;
 	}
 
 	/*
@@ -23,10 +17,24 @@ public class Getter {
 	public List<String> getHeaderList(boolean messageIsRequest,IHttpRequestResponse messageInfo) {
 		if(messageIsRequest) {
 			IRequestInfo analyzeRequest = helpers.analyzeRequest(messageInfo);
-			return analyzeRequest.getHeaders();
+			List<String> headers = analyzeRequest.getHeaders();
+			return headers;
 		}else {
 			IResponseInfo analyzeResponse = helpers.analyzeResponse(messageInfo.getResponse());
-			return analyzeResponse.getHeaders();
+			List<String> headers = analyzeResponse.getHeaders();
+			return headers;
+		}
+	}
+
+	public List<String> getHeaderList(boolean IsRequest,byte[] requestOrResponse) {
+		if(IsRequest) {
+			IRequestInfo analyzeRequest = helpers.analyzeRequest(requestOrResponse);
+			List<String> headers = analyzeRequest.getHeaders();
+			return headers;
+		}else {
+			IResponseInfo analyzeResponse = helpers.analyzeResponse(requestOrResponse);
+			List<String> headers = analyzeResponse.getHeaders();
+			return headers;
 		}
 	}
 
@@ -37,11 +45,20 @@ public class Getter {
 	 * 就能满足上面的场景了
 	 */
 	public String getHeaderString(boolean messageIsRequest,IHttpRequestResponse messageInfo) {
-		List<String> headers =getHeaderList(messageIsRequest,messageInfo);
+		List<String> headers =null;
 		StringBuilder headerString = new StringBuilder();
+		if(messageIsRequest) {
+			IRequestInfo analyzeRequest = helpers.analyzeRequest(messageInfo);
+			headers = analyzeRequest.getHeaders();
+		}else {
+			IResponseInfo analyzeResponse = helpers.analyzeResponse(messageInfo.getResponse());
+			headers = analyzeResponse.getHeaders();
+		}
+
 		for (String header : headers) {
 			headerString.append(header);
 		}
+
 		return headerString.toString();
 	}
 
@@ -50,43 +67,38 @@ public class Getter {
 	 * 这种方式可以用put函数轻松实现：如果有则update，如果无则add。
 	 * ！！！注意：这个方法获取到的map，会少了协议头GET /cps.gec/limit/information.html HTTP/1.1
 	 */
-	public LinkedHashMap<String,String> getHeaderHashMap(boolean messageIsRequest,IHttpRequestResponse messageInfo) {
-		List<String> headers = getHeaderList(messageIsRequest,messageInfo);
-		LinkedHashMap<String,String> result = new LinkedHashMap<String, String>();
-		headers.remove(0);
+	public HashMap<String,String> getHeaderHashMap(boolean messageIsRequest,IHttpRequestResponse messageInfo) {
+		List<String> headers=null;
+		HashMap<String,String> result = new HashMap<String, String>();
+		if(messageIsRequest) {
+			IRequestInfo analyzeRequest = helpers.analyzeRequest(messageInfo);
+			headers = analyzeRequest.getHeaders();
+		}else {
+			IResponseInfo analyzeResponse = helpers.analyzeResponse(messageInfo.getResponse());
+			headers = analyzeResponse.getHeaders();
+		}
+
 		for (String header : headers) {
-			try {
-				String headerName = header.split(Header_Spliter, 0)[0];
-				String headerValue = header.split(Header_Spliter, 0)[1];
-				result.put(headerName, headerValue);
-			} catch (Exception e) {
+			if(header.contains(Header_Spliter)) {//to void trigger the Exception
 				try {
-					String headerName = header.split(":", 0)[0];
-					String headerValue = header.split(":", 0)[1];
+					String headerName = header.split(Header_Spliter, 0)[0];
+					String headerValue = header.split(Header_Spliter, 0)[1];
+					//POST /login.pub HTTP/1.1  the first line of header will tirgger error here
 					result.put(headerName, headerValue);
-				}catch (Exception e1) {
-					stderr.print("Error Header: "+header);
+				} catch (Exception e) {
+					//e.printStackTrace();
 				}
 			}
 		}
 		return result;
 	}
 
-	public String getHeaderFirstLine(boolean messageIsRequest,IHttpRequestResponse messageInfo){
-		if(messageIsRequest) {
-			return helpers.analyzeRequest(messageInfo).getHeaders().get(0);
-		}else {
-			return helpers.analyzeResponse(messageInfo.getResponse()).getHeaders().get(0);
-		}
-	}
-
-	public List<String> HeaderMapToList(String firstline,LinkedHashMap<String,String> Headers){
+	public List<String> MapToList(HashMap<String,String> Headers){
 		List<String> result = new ArrayList<String>();
 		for (Entry<String,String> header:Headers.entrySet()) {
-			String item = header.getKey()+": "+header.getValue();
+			String item = header.getKey()+Header_Spliter+header.getValue();
 			result.add(item);
 		}
-		result.add(0,firstline);
 		return result;
 	}
 
@@ -94,8 +106,29 @@ public class Getter {
 	 * 获取某个header的值，如果没有此header，返回null。
 	 */
 	public String getHeaderValueOf(boolean messageIsRequest,IHttpRequestResponse messageInfo, String headerName) {
-		LinkedHashMap<String,String> headers = getHeaderHashMap(messageIsRequest,messageInfo);
-		return headers.get(headerName);
+		List<String> headers=null;
+		if(messageIsRequest) {
+			if (messageInfo.getRequest() == null) {
+				return null;
+			}
+			IRequestInfo analyzeRequest = helpers.analyzeRequest(messageInfo);
+			headers = analyzeRequest.getHeaders();
+		}else {
+			if (messageInfo.getResponse() == null) {
+				return null;
+			}
+			IResponseInfo analyzeResponse = helpers.analyzeResponse(messageInfo.getResponse());
+			headers = analyzeResponse.getHeaders();
+		}
+
+
+		headerName = headerName.toLowerCase().replace(":", "");
+		for (String header : headers) {
+			if (header.toLowerCase().startsWith(headerName)) {
+				return header.split(Header_Spliter, 2)[1];//分成2部分，Location: https://www.jd.com
+			}
+		}
+		return null;
 	}
 
 
@@ -127,6 +160,24 @@ public class Getter {
 		}
 	}
 
+	public byte[] getBody(boolean isRequest,byte[] requestOrResponse) {
+		if (requestOrResponse == null){
+			return null;
+		}
+		int bodyOffset = -1;
+		if(isRequest) {
+			IRequestInfo analyzeRequest = helpers.analyzeRequest(requestOrResponse);
+			bodyOffset = analyzeRequest.getBodyOffset();
+		}else {
+			IResponseInfo analyzeResponse = helpers.analyzeResponse(requestOrResponse);
+			bodyOffset = analyzeResponse.getBodyOffset();
+		}
+		byte[] byte_body = Arrays.copyOfRange(requestOrResponse, bodyOffset, requestOrResponse.length);//not length-1
+		//String body = new String(byte_body); //byte[] to String
+		return byte_body;
+	}
+
+
 	public String getShortUrl(IHttpRequestResponse messageInfo) {
 		return messageInfo.getHttpService().toString();
 	}
@@ -143,6 +194,9 @@ public class Getter {
 	}
 
 	public short getStatusCode(IHttpRequestResponse messageInfo) {
+		if (messageInfo == null || messageInfo.getResponse() == null) {
+			return -1;
+		}
 		IResponseInfo analyzedResponse = helpers.analyzeResponse(messageInfo.getResponse());
 		return analyzedResponse.getStatusCode();
 	}

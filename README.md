@@ -410,3 +410,31 @@ public class BurpExtender implements IBurpExtender, IHttpListener
 }
 ```
 
+
+
+
+
+
+
+### 一些小的点
+
+1. buildRequest是在原始值后追加，还是替换原始值？
+
+		byte[] requsetbyte = insertionPoint.buildRequest((insertionPoint.getBaseValue()+payload).getBytes());
+		//buildRequest是在原始值后追加，还是替换原始值？ 经测试是替换！！！
+2. burp插件开发中，子类异常不要使用system.exit(0)，否则整个burp都将退出！
+
+
+
+3. 添加issue时有2种方法（还是强烈建议使用issues.add的方法！！！避免漏报！）
+
+   ```
+   1、 通过callbacks.addScanIssue ，这种方法添加的issue，中不会包含当前插入点。适合用于url级别、host级别的扫描。
+       burp官网不建议使用的方法，通过它添加的漏洞，不会在scanqueue中有记录！！！【在实际的debug测试中还出现过明明调用成功，却发现连target中都没有记录的情况！！！】
+   2、 通过创建List<IScanIssue> issues = new ArrayList<>(); 然后在函数结尾返回这个list，然后会由burp进行issue的添加，这个适合burp是知道当前插入点的，会包含插入点名称。    这是burp建议的添加漏洞的方法，实际测试它也是有优势的！通过它上报的漏洞会在【scanqueue和 target】中都有记录。而且这个方法的整体逻辑中有自动判断去重的能力！唯一的缺点就是始终包含插入点信息！
+   
+   3、值得注意的是，在我自己修改的J2EEScan中，由于通过数据组
+   
+   ```
+
+   
