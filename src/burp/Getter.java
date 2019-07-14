@@ -70,6 +70,7 @@ public class Getter {
 	public HashMap<String,String> getHeaderHashMap(boolean messageIsRequest,IHttpRequestResponse messageInfo) {
 		List<String> headers=null;
 		HashMap<String,String> result = new HashMap<String, String>();
+		if (headers.size() <=0) return result;
 		if(messageIsRequest) {
 			IRequestInfo analyzeRequest = helpers.analyzeRequest(messageInfo);
 			headers = analyzeRequest.getHeaders();
@@ -206,6 +207,19 @@ public class Getter {
 		return analyzeRequest.getParameters();
 	}
 
+	public String getMimeType(IHttpRequestResponse messageInfo) {
+		try {
+			IResponseInfo analyzeResponse = helpers.analyzeResponse(messageInfo.getResponse());
+			String MIMEtype = analyzeResponse.getStatedMimeType();
+			if(MIMEtype == null) {
+				MIMEtype = analyzeResponse.getInferredMimeType();
+			}
+			return MIMEtype;
+		} catch (Exception e) {
+			return null;
+			//e.printStackTrace();
+		}
+	}
 
 	public String getHTTPBasicCredentials(IHttpRequestResponse messageInfo) throws Exception{
 		String authHeader  = getHeaderValueOf(true, messageInfo, "Authorization").trim();
