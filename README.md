@@ -110,7 +110,7 @@ https://github.com/PortSwigger/example-hello-world/blob/master/java/BurpExtender
 
 ### 依赖包的管理
 
-```
+```xml
 <project xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -198,7 +198,7 @@ https://github.com/PortSwigger/example-hello-world/blob/master/java/BurpExtender
 
 ### 插件程序的规范
 
-```
+```java
 package burp;
 
 import java.io.PrintWriter;
