@@ -1,5 +1,257 @@
 ﻿# burp api drops
 
+# 一、Burp插件介绍和编程语言选择
+
+
+
+## 插件是什么？
+
+扩展burp功能的程序，依赖burp提供的API，让使用者可以开发一些自己想要的功能。
+
+
+
+## 插件可以干什么？
+
+请求和响应包的修改：比如在每个请求包中加如自定义的header
+
+自定义UI界面：插件可以实现一个自己的tab，方便图像化操作
+
+自定义扫描插件：当出现了新的漏洞，我们就可以编写自己的扫描插件，来自动化发现这类漏洞
+
+访问burp中的一些关键数据：比如proxy中的请求记录、sitemap中请求响应、扫描发现的漏洞（issue）
+
+
+
+## 插件怎么使用？
+
+先讲burp插件的基本使用：加载安装、卸载、排序
+
+插件的加载，可以从burp官方的BApp Store中进行加载安装
+
+![image.png](README.assets/1606619413514-685edf98-53dd-4580-a277-e6585ba0e05e.png)
+
+也可加载一些外部插件。
+
+![image.png](README.assets/1606619499895-6b278f72-8308-4736-bae8-7d2c3e187ddf.png)
+
+
+
+加载后burp才会起作用，可以通过点击这个选择框来启用或禁用插件。
+
+![image.png](README.assets/1606619827050-4cda3e0b-2b81-4eef-846b-01c79e3c21c7.png)
+
+值得注意的是：图形界面中的顺序，就是插件被调用的顺序！我们可以通过 Up或Down来调整插件的顺序。
+
+当多个插件有相同的操作时，比如修改请求数据包，插件的顺序就可能影响最后的请求数据包的内容。
+
+## 插件怎么开发？
+
+这是我们这个系列课程的核心主题，后续的章节就是围绕这个主题进行的。
+
+
+
+## 编程语言的选择
+
+burp suite支持三种编程语言开发的插件:
+
+- Java
+- python
+- ruby
+
+我们选择Java，为什么选择Java？原因有三：
+
+1、兼容性
+
+之前也用python写过几个简单插件。遇到过一种情况，当需要调用的外部类包含遇到pyd文件就无法进行下去了，因为pyd是C写的，Jython是无法使用C写的模块的。burp本身是Java写的，使用Java去开发插件兼容性最高，会少很多莫名其妙的错误。
+
+![image](README.assets/1604903986218-81a5b98b-c957-4868-8956-c15e0219c1d6.png)
+
+![image](README.assets/1604904004949-ee27eaf4-c0a6-4b32-ab13-d8ee666cccd7.png)
+
+下面这个链接对此有详细说明：http://stackoverflow.com/questions/16218183/using-pyd-library-in-jython
+
+2、调试
+
+当使用python写插件进行调试时，只能尽量通过输出去获取信息，没有好的办法进行下断点动态调试。而Java 则可以，对于复杂逻辑的插件，Java编写的更容易排查问题。
+
+3、打包
+
+是burp写的插件可以打包成一个独立的Jar包，方便移动和传播，环境配置也更简单。
+
+
+
+综上，Java时写burp插件的最佳的选择。
+
+
+
+# 二、开发环境准备和Hello World
+
+## 环境搭建
+
+### JDK安装
+
+在Oracle官网可以找到各种版本JDK的[下载地址](https://www.oracle.com/java/technologies/oracle-java-archive-downloads.html) ，我们选择[JDK8](https://www.oracle.com/java/technologies/javase/javase8u211-later-archive-downloads.html#license-lightbox)，并且将java.exe所在目录加入系统环境变量。
+
+### IDEA 或 Eclipse
+
+推荐使用IDEA，它的调试功能比较好用。
+
+### maven
+
+https://maven.apache.org/download.cgi
+
+![image.png](README.assets/1606638361401-a63f06da-1a58-42ca-8c9a-24f9b2246c53.png)
+
+下载后解压，然后将mvn.cmd所在目录加入环境变量即可。
+
+## 国际惯例hello world
+
+https://github.com/PortSwigger/example-hello-world/blob/master/java/BurpExtender.java
+
+### 依赖包的管理
+
+```
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.bit4woo.burp</groupId>
+    <artifactId>domain_hunter</artifactId>
+    <version>1.4</version>
+    <build>
+        <sourceDirectory>src</sourceDirectory>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>
+                                true<!--to get Version from pom.xml -->
+                            </addDefaultImplementationEntries>
+                        </manifest>
+                    </archive>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/net.portswigger.burp.extender/burp-extender-api -->
+        <dependency>
+            <groupId>net.portswigger.burp.extender</groupId>
+            <artifactId>burp-extender-api</artifactId>
+            <version>1.7.22</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.6</version>
+        </dependency>
+
+        <!-- to get root domain -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>29.0-jre</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-text -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>1.6</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.beanshell/bsh -->
+        <dependency>
+            <groupId>org.beanshell</groupId>
+            <artifactId>bsh</artifactId>
+            <version>2.0b5</version>
+        </dependency>
+    </dependencies>
+</project>
+```
+
+### 插件程序的规范
+
+```
+package burp;
+
+import java.io.PrintWriter;
+
+public class BurpExtender implements IBurpExtender
+{
+    @Override
+    public void registerExtenderCallbacks(IBurpExtenderCallbacks callbacks)
+    {
+        // 设置插件的名称
+        callbacks.setExtensionName("Hello world extension");
+        
+        // 获取burp提供的标准输出流和错误输出流
+        PrintWriter stdout = new PrintWriter(callbacks.getStdout(), true);
+        PrintWriter stderr = new PrintWriter(callbacks.getStderr(), true);
+        
+        // 打印到标准输出流
+        stdout.println("Hello output");
+        
+        // 答应到错误输出流
+        stderr.println("Hello errors");
+        
+        // 写一个报警信息到burp的报警面板
+        callbacks.issueAlert("Hello alerts");
+        
+        // 抛出一个异常，将会在错误输出流中显示
+        throw new RuntimeException("Hello exceptions");
+    }
+}
+```
+
+
+
+- 所有的burp插件都必须实现IBurpExtender这个接口
+- 实现类的包名称必须是burp
+- 实现类的名称必须是BurpExtender
+- 实现类比较是public的
+- 实现类必须有默认构造函数（public，无参），如果没有定义构造函数就是默认构造函数
+
+### callbacks对象的作用
+
+通过 callbacks 这个实例对象，传递给插件一系列burp的原生方法。我们需要实现的很多功能都需要调用这些方法。
+
+
+
+
+
+
+
+
+
+
+
 主要参考：
 
 官方各种示例代码：https://portswigger.net/burp/extender
