@@ -80,7 +80,7 @@ burp suite支持三种编程语言开发的插件:
 
 
 
-综上，Java时写burp插件的最佳的选择。
+综上，Java是写burp插件的最佳的选择。
 
 
 
@@ -244,11 +244,46 @@ public class BurpExtender implements IBurpExtender
 
 
 
+# 三、动态调试方法
+
+## IDEA的配置
+
+![image.png](README.assets/1606640239966-4667fc63-451a-4ad7-ac5c-27c217e8a7ce.png)
+
+![image.png](README.assets/1606640411890-7624cf92-599e-4842-a47a-087366264950.png)
+
+## burp端的启动参数
+
+```
+java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -jar burpsuite_pro_v2020.2.1.jar
+pause
+```
+
+## 破解版burp的调试方法
+
+国内我们用的burp版本大家都懂的，一般都是破解版（使用Keygen或者helper的都有），如果要使用破解版进行调试，可以使用如下命令行参数启动burp，然后运行burp的JVM将处于监听状态，5005端口。
+
+```
+java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -Xbootclasspath/p:burp-loader-keygen-70yeartime-BurpPro.jar -jar burpsuite_pro_v1.7.37.jar
+
+java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -Xbootclasspath/p:BurpHelper2019.jar -jar burpsuite_pro_v1.7.37.jar
+```
+
+这个命令和正版不同的地方就是需要加 Xbootclasspath/p: 这一段，可以保存个bat，方便一键启动。
+
+## 使用logger++分析数据包帮助调试
+
+如果是写扫描插件、或者其他需要修改请求响应包的插件，我们可以使用logger++来帮助我们查看修改后的请求响应包。
+
+![image.png](README.assets/1606742746194-b399dcec-1596-4c3f-937d-1cca25a42f4d.png)
 
 
 
 
 
+
+
+============================================================================
 
 
 
