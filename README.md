@@ -279,7 +279,85 @@ java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -Xbootcl
 
 
 
+# 四、学习思路和核心逻辑
 
+## 向官方文档和API学习
+
+官方教学文档和API文档一定是最权威的，如果有问题，首先找官方文档。
+
+比如选择有一个需求，要获取请求包的某个header的值，但是不知道怎么做，那么我们可以尝试在API中找关键词：
+
+![image.png](img/README/1606796866630-3c369cc3-8aba-4abe-8d75-f512ad48fa6d.png)
+
+## 向已有的优秀插件学习
+
+可以找BApp Store上的类似功能的插件，查看他们的源码，学习作者的实现思路。
+
+![image.png](img/README/1606797107722-acb35ff9-e679-4f6b-ada4-8dd67bcaaea2.png)
+
+如果是非官方的BApp Store的项目，还可以直接反编译它的Jar包，查看其代码，[JD-GUI](http://java-decompiler.github.io/)了解一下
+
+## burp中的核心对象
+
+burp中最为核心的对象就是HTTP数据包，我们的所有操作、各种API接口都是围绕HTTP数据包展开的。
+
+![image.png](img/README/1606802939411-2d6e6fab-a7e1-4f23-8eca-4169160a7020.png)
+
+![image.png](img/README/1606803735648-4303523e-06f0-4e3b-9efb-080bf6c2b59d.png)
+
+## 插件的调用逻辑
+
+![image.png](img/README/1606995995569-9ff54d79-0fb2-4472-b7c4-620bc43ec16e.png)
+
+以HttpListener为例说明一下【burp主程序】和【burp插件程序】之间的调用关系。
+
+第一步：burp插件被加载时，【burp主程序】就会去调用BurpExtender类中的registerExtenderCallbacks方法。【burp插件程序】就是通过这个方法，在其中注册HttpListener，其目的就是告诉【burp主程序】当前HttpListener对象的存在。类似地，Factory等其他需要由burp主程序主动调用或通知的对象，也需要在这个函数中完成注册。
+
+第二步：当【burp主程序】的某个组件产生了一个请求或者响应包（比如Proxy收到了一个来自浏览的请求，Scanner主动发起了一个扫描请求，Scanner收到了扫描请求的响应包等等）都会主动通知各个已知HttpListener对象。类似地，Factory等其他对象，也会在不同的场景下被通知或者别调用，比如ExtensionStateListener，会在burp插件取消加载的时候被通知。
+
+第三步：【burp插件程序】中的HttpListener对象在收到通知信息后，执行自己特定的逻辑（processHttpMessage函数中），进行数据包的修改或者分析。类似地，其他对象也都有实现自己逻辑的函数。
+
+## 需要主动注册的对象
+
+他们的共通特定是：会被burp主程序主动调用或者主动通知，burp主程序必须知道它们的存在，才能完成对应的功能。
+
+### 各种事件监听器
+
+ExtensionStateListener
+
+HttpListener
+
+ProxyListener
+
+ScannerListener
+
+ScopeChangeListener
+
+### 各种对象构造工厂
+
+ContextMenuFactory
+
+MessageEditorTabFactory
+
+IntruderPayloadGeneratorFactory
+
+### 其他
+
+ScannerInsertionPointProvider
+
+ScannerCheck
+
+IntruderPayloadProcessor
+
+SessionHandlingAction
+
+MenuItem
+
+
+
+演示代码
+
+https://github.com/PortSwigger/example-event-listeners/blob/master/java/BurpExtender.java
 
 
 
