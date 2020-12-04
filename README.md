@@ -285,6 +285,10 @@ java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -Xbootcl
 
 官方教学文档和API文档一定是最权威的，如果有问题，首先找官方文档。
 
+官方各种示例代码：https://portswigger.net/burp/extender
+
+官方API文档：https://portswigger.net/burp/extender/api/
+
 比如选择有一个需求，要获取请求包的某个header的值，但是不知道怎么做，那么我们可以尝试在API中找关键词：
 
 ![image.png](img/README/1606796866630-3c369cc3-8aba-4abe-8d75-f512ad48fa6d.png)
@@ -359,25 +363,7 @@ MenuItem
 
 https://github.com/PortSwigger/example-event-listeners/blob/master/java/BurpExtender.java
 
-
-
-============================================================================
-
-
-
-主要参考：
-
-官方各种示例代码：https://portswigger.net/burp/extender
-
-官方API文档：https://portswigger.net/burp/extender/api/
-
-
-
-这个项目主要收集了个人写burp插件时用到的主要的方法和代码。
-
-
-
-我们的主线任务就是**<u>处理请HTTP请求和响应</u>**。
+===============================================
 
 
 
