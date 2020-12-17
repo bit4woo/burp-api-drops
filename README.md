@@ -1,5 +1,53 @@
 ﻿# burp api drops
 
+API快速索引 ：
+
+| burp api                         | 相关课程                                   | 示例代码                                                     |
+| -------------------------------- | ------------------------------------------ | ------------------------------------------------------------ |
+| IBurpCollaboratorClientContext   |                                            |                                                              |
+| IBurpCollaboratorInteraction     |                                            |                                                              |
+| IBurpExtender                    | 第二课：开发环境准备和Hello World          | https://github.com/PortSwigger/example-hello-world/blob/master/java/BurpExtender.java |
+| IBurpExtenderCallbacks           | 第二课：开发环境准备和Hello World          | https://github.com/PortSwigger/example-hello-world/blob/master/java/BurpExtender.java |
+| IContextMenuFactory              |                                            |                                                              |
+| IContextMenuInvocation           |                                            |                                                              |
+| ICookie                          |                                            |                                                              |
+| IExtensionHelpers                |                                            |                                                              |
+| IExtensionStateListener          |                                            |                                                              |
+| IHttpListener                    | 第五课：HTTP数据包的处理（获取\修改\发送） | https://github.com/PortSwigger/example-traffic-redirector/blob/master/java/BurpExtender.java<br />https://github.com/PortSwigger/custom-logger/blob/master/java/BurpExtender.java |
+| IHttpRequestResponse             | 第五课：HTTP数据包的处理（获取\修改\发送） | https://github.com/PortSwigger/example-traffic-redirector/blob/master/java/BurpExtender.java<br />https://github.com/PortSwigger/custom-logger/blob/master/java/BurpExtender.java |
+| IHttpRequestResponsePersisted    |                                            |                                                              |
+| IHttpRequestResponseWithMarkers  |                                            |                                                              |
+| IHttpService                     |                                            |                                                              |
+| IInterceptedProxyMessage         |                                            |                                                              |
+| IIntruderAttack                  |                                            |                                                              |
+| IIntruderPayloadGenerator        |                                            |                                                              |
+| IIntruderPayloadGeneratorFactory |                                            |                                                              |
+| IIntruderPayloadProcessor        |                                            |                                                              |
+| IMenuItemHandler                 |                                            |                                                              |
+| IMessageEditor                   |                                            |                                                              |
+| IMessageEditorController         |                                            |                                                              |
+| IMessageEditorTab                |                                            |                                                              |
+| IMessageEditorTabFactory         |                                            |                                                              |
+| IParameter                       |                                            |                                                              |
+| IProxyListener                   |                                            |                                                              |
+| IRequestInfo                     |                                            |                                                              |
+| IResponseInfo                    |                                            |                                                              |
+| IResponseKeywords                |                                            |                                                              |
+| IResponseVariations              |                                            |                                                              |
+| IScanIssue                       |                                            |                                                              |
+| IScannerCheck                    |                                            |                                                              |
+| IScannerInsertionPoint           |                                            |                                                              |
+| IScannerInsertionPointProvider   |                                            |                                                              |
+| IScannerListener                 |                                            |                                                              |
+| IScanQueueItem                   |                                            |                                                              |
+| IScopeChangeListener             |                                            |                                                              |
+| ISessionHandlingAction           |                                            |                                                              |
+| ITab                             |                                            |                                                              |
+| ITempFile                        |                                            |                                                              |
+| ITextEditor                      |                                            |                                                              |
+
+
+
 # 一、Burp插件介绍和编程语言选择
 
 
@@ -363,35 +411,7 @@ MenuItem
 
 https://github.com/PortSwigger/example-event-listeners/blob/master/java/BurpExtender.java
 
-===============================================
-
-
-
-### 起步--必须的方法和实现
-
-```java
-//所有burp插件都必须实现IBurpExtender接口，而且实现的类必须叫做BurpExtender
-public class BurpExtender implements IBurpExtender，IHttpListener
-{
-    private IBurpExtenderCallbacks callbacks;
-    private IExtensionHelpers helpers;
-    
-    private PrintWriter stdout;
-    private String ExtenderName = "bit4 extender name";
-    
-    @Override
-    public void registerExtenderCallbacks(IBurpExtenderCallbacks callbacks)
-    {//IBurpExtender，必须实现的方法
-    	stdout = new PrintWriter(callbacks.getStdout(), true);
-    	stdout.println(ExtenderName);
-        this.callbacks = callbacks;
-        helpers = callbacks.getHelpers();
-        callbacks.setExtensionName(ExtenderName); //插件名称
-        callbacks.registerHttpListener(this); //如果没有注册，下面的processHttpMessage方法是不会生效的。处理请求和响应包的插件，这个应该是必要的
-    }
-```
-
-
+# 五、HTTP数据包的处理（获取\修改\更新）
 
 ### 处理http请求
 
@@ -497,25 +517,6 @@ baseRequestResponse.getHttpService(), modifiedRawRequest);
 
 
 
-### 错误输出方式
-
-```java
-private PrintWriter stdout;
-private PrintWriter stderr;
-
-stdout = new PrintWriter(callbacks.getStdout(), true);
-stderr = new PrintWriter(callbacks.getStderr(), true);
-
-try{
-    xxxx;
-}catch(Exception e){
-    e.printStackTrace(stderr);
-    //这种方式会输出错误栈，利于错误排查
-}
-```
-
-
-
 ### 常用HTTP信息获取方法
 
 ```java
@@ -587,8 +588,6 @@ public class Getter {
 }
 
 ```
-
-
 
 
 
@@ -751,7 +750,6 @@ public class BurpExtender implements IBurpExtender, IHttpListener
 			}
 		}	    		
     }
-
     
 	public int checkEnabledFor(IBurpExtenderCallbacks callbacks){
 		//get values that should enable this extender for which Component.
@@ -761,7 +759,7 @@ public class BurpExtender implements IBurpExtender, IHttpListener
 }
 ```
 
-
+# 六、访问burp中的一些关键数据
 
 
 
