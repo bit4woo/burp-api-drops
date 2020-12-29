@@ -761,6 +761,68 @@ public class BurpExtender implements IBurpExtender, IHttpListener
 
 # 六、访问burp中的一些关键数据
 
+## 从 Scanner issues中收集邮箱地址
+
+## 从 Proxy history中查找最新cookie
+
+## 发起扫描任务、爬行
+
+## 查询和更新scope
+
+
+
+
+
+# 七、Session Tokens 本质也是请求包的修改
+
+https://github.com/PortSwigger/example-custom-session-tokens
+
+
+
+# 八、IMessageEditorTab
+
+
+
+# 九、自定义UI界面\菜单
+
+## 使用windowsBuilder
+
+
+
+# 十、自定义扫描插件的开发
+
+
+
+iscanissue
+
+## 自定义扫描插入点
+
+为什么需要自定义插入点
+
+![image-20201229105908520](img/README/image-20201229105908520.png)
+
+https://github.com/PortSwigger/example-custom-scan-insertion-points
+
+https://github.com/PortSwigger/example-scanner-checks
+
+## 如何与burp自生DNSlog进行交互
+
+
+
+## 开发一个复杂的扫描插件，要注意什么？
+
+
+
+# 十一、自定义Intruder Payloads
+
+Provide custom Intruder payloads and payload processors.
+
+https://github.com/PortSwigger/example-intruder-payloads
+
+
+
+# 十二、插件配置的保存
+
 
 
 
@@ -769,8 +831,9 @@ public class BurpExtender implements IBurpExtender, IHttpListener
 
 1. buildRequest是在原始值后追加，还是替换原始值？
 
-		byte[] requsetbyte = insertionPoint.buildRequest((insertionPoint.getBaseValue()+payload).getBytes());
-		//buildRequest是在原始值后追加，还是替换原始值？ 经测试是替换！！！
+   	byte[] requsetbyte = insertionPoint.buildRequest((insertionPoint.getBaseValue()+payload).getBytes());
+   	//buildRequest是在原始值后追加，还是替换原始值？ 经测试是替换！！！
+
 2. burp插件开发中，子类异常不要使用system.exit(0)，否则整个burp都将退出！
 
 
@@ -786,4 +849,3 @@ public class BurpExtender implements IBurpExtender, IHttpListener
    
    ```
 
-   
