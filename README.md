@@ -325,7 +325,11 @@ java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -Xbootcl
 
 ![image.png](README.assets/1606742746194-b399dcec-1596-4c3f-937d-1cca25a42f4d.png)
 
+## 使用burp的log功能帮助分析数据包
 
+由于logger++有时会出问题，这里再推荐一种替代方案，就是通过burp的log功能，来帮助查看数据包。
+
+![image-20210103175220054](README.assets/image-20210103175220054.png)
 
 # 四、学习思路和核心逻辑
 
