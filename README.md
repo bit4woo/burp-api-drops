@@ -427,7 +427,7 @@ https://github.com/bit4woo/burp-api-common/blob/master/src/main/java/burp/Helper
 
 操作无非“增删查改”四种，下面这都代码对常用操作均进行了演示
 
-​		请求包：
+#### 请求包：
 
 - ​		header 的获取、删除、新增、修改
 
@@ -436,15 +436,20 @@ https://github.com/bit4woo/burp-api-common/blob/master/src/main/java/burp/Helper
 - ​		parameter 的获取、删除、新增、修改
 
 - ​		发送一个新的请求
-  响应包：
+  
+#### 响应包：
 
 - ​		header 的获取、删除、新增、修改
 
 - ​		body 的获取、修改
 
-  httpService:
+#### httpService:
 
 - ​		host、port、protocol 的获取、修改
+
+
+
+完整源码地址：https://github.com/bit4woo/burp-api-drops/blob/master/src/burp/Lession5.java
 
 
 ```java
