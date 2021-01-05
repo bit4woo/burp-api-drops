@@ -5,6 +5,8 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
+//!!!要使用这个文件中的代码，需要先将文件名改为BurpExtender.java
+
 public class BurpExtender implements IBurpExtender, IHttpListener
 {//所有burp插件都必须实现IBurpExtender接口，而且实现的类必须叫做BurpExtender
 	private IBurpExtenderCallbacks callbacks;

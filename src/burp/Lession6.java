@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 
 import javax.swing.JMenuItem;
 
+//!!!要使用这个文件中的代码，需要先将文件名改为BurpExtender.java
 
 public class BurpExtender implements IBurpExtender, IContextMenuFactory
 {//所有burp插件都必须实现IBurpExtender接口，而且实现的类必须叫做BurpExtender

@@ -8,8 +8,8 @@ API快速索引 ：
 | IBurpCollaboratorInteraction     |                                                  |                                                              |
 | IBurpExtender                    | 二、开发环境准备和Hello World                    | https://github.com/PortSwigger/example-hello-world           |
 | IBurpExtenderCallbacks           | 二、开发环境准备和Hello World                    | https://github.com/PortSwigger/example-hello-world           |
-| IContextMenuFactory              |                                                  |                                                              |
-| IContextMenuInvocation           |                                                  |                                                              |
+| IContextMenuFactory              | 六、访问burp中的关键数据                         | https://github.com/bit4woo/knife<br />https://github.com/bit4woo/burp-api-drops/blob/master/src/burp/Lession6.java |
+| IContextMenuInvocation           | 六、访问burp中的关键数据                         | https://github.com/bit4woo/knife<br />https://github.com/bit4woo/burp-api-drops/blob/master/src/burp/Lession6.java |
 | ICookie                          |                                                  |                                                              |
 | IExtensionHelpers                | 五、HTTP数据包的处理                             |                                                              |
 | IExtensionStateListener          |                                                  | https://github.com/PortSwigger/example-event-listeners       |

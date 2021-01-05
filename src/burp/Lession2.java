@@ -2,6 +2,8 @@ package burp;
 
 import java.io.PrintWriter;
 
+//!!!要使用这个文件中的代码，需要先将文件名改为BurpExtender.java
+
 public class BurpExtender implements IBurpExtender
 {
     @Override
