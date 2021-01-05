@@ -2,49 +2,49 @@
 
 API快速索引 ：
 
-| burp api                         | 相关课程                                   | 示例代码                                                     |
-| -------------------------------- | ------------------------------------------ | ------------------------------------------------------------ |
-| IBurpCollaboratorClientContext   |                                            |                                                              |
-| IBurpCollaboratorInteraction     |                                            |                                                              |
-| IBurpExtender                    | 第二课：开发环境准备和Hello World          | https://github.com/PortSwigger/example-hello-world/blob/master/java/BurpExtender.java |
-| IBurpExtenderCallbacks           | 第二课：开发环境准备和Hello World          | https://github.com/PortSwigger/example-hello-world/blob/master/java/BurpExtender.java |
-| IContextMenuFactory              |                                            |                                                              |
-| IContextMenuInvocation           |                                            |                                                              |
-| ICookie                          |                                            |                                                              |
-| IExtensionHelpers                |                                            |                                                              |
-| IExtensionStateListener          |                                            |                                                              |
-| IHttpListener                    | 第五课：HTTP数据包的处理（获取\修改\发送） | https://github.com/PortSwigger/example-traffic-redirector/blob/master/java/BurpExtender.java<br />https://github.com/PortSwigger/custom-logger/blob/master/java/BurpExtender.java |
-| IHttpRequestResponse             | 第五课：HTTP数据包的处理（获取\修改\发送） | https://github.com/PortSwigger/example-traffic-redirector/blob/master/java/BurpExtender.java<br />https://github.com/PortSwigger/custom-logger/blob/master/java/BurpExtender.java |
-| IHttpRequestResponsePersisted    |                                            |                                                              |
-| IHttpRequestResponseWithMarkers  |                                            |                                                              |
-| IHttpService                     |                                            |                                                              |
-| IInterceptedProxyMessage         |                                            |                                                              |
-| IIntruderAttack                  |                                            |                                                              |
-| IIntruderPayloadGenerator        |                                            |                                                              |
-| IIntruderPayloadGeneratorFactory |                                            |                                                              |
-| IIntruderPayloadProcessor        |                                            |                                                              |
-| IMenuItemHandler                 |                                            |                                                              |
-| IMessageEditor                   |                                            |                                                              |
-| IMessageEditorController         |                                            |                                                              |
-| IMessageEditorTab                |                                            |                                                              |
-| IMessageEditorTabFactory         |                                            |                                                              |
-| IParameter                       |                                            |                                                              |
-| IProxyListener                   |                                            |                                                              |
-| IRequestInfo                     |                                            |                                                              |
-| IResponseInfo                    |                                            |                                                              |
-| IResponseKeywords                |                                            |                                                              |
-| IResponseVariations              |                                            |                                                              |
-| IScanIssue                       |                                            |                                                              |
-| IScannerCheck                    |                                            |                                                              |
-| IScannerInsertionPoint           |                                            |                                                              |
-| IScannerInsertionPointProvider   |                                            |                                                              |
-| IScannerListener                 |                                            |                                                              |
-| IScanQueueItem                   |                                            |                                                              |
-| IScopeChangeListener             |                                            |                                                              |
-| ISessionHandlingAction           |                                            |                                                              |
-| ITab                             |                                            |                                                              |
-| ITempFile                        |                                            |                                                              |
-| ITextEditor                      |                                            |                                                              |
+| burp api                         | 相关课程                                         | 示例代码                                                     |
+| -------------------------------- | ------------------------------------------------ | ------------------------------------------------------------ |
+| IBurpCollaboratorClientContext   |                                                  |                                                              |
+| IBurpCollaboratorInteraction     |                                                  |                                                              |
+| IBurpExtender                    | 二、开发环境准备和Hello World                    | https://github.com/PortSwigger/example-hello-world           |
+| IBurpExtenderCallbacks           | 二、开发环境准备和Hello World                    | https://github.com/PortSwigger/example-hello-world           |
+| IContextMenuFactory              |                                                  |                                                              |
+| IContextMenuInvocation           |                                                  |                                                              |
+| ICookie                          |                                                  |                                                              |
+| IExtensionHelpers                | 五、HTTP数据包的处理                             |                                                              |
+| IExtensionStateListener          |                                                  | https://github.com/PortSwigger/example-event-listeners       |
+| IHttpListener                    | 四、学习思路和核心逻辑<br />五、HTTP数据包的处理 | https://github.com/PortSwigger/example-event-listeners<br />https://github.com/PortSwigger/custom-logger |
+| IHttpRequestResponse             | 五、HTTP数据包的处理                             | https://github.com/PortSwigger/example-traffic-redirector<br />https://github.com/PortSwigger/custom-logger |
+| IHttpRequestResponsePersisted    |                                                  |                                                              |
+| IHttpRequestResponseWithMarkers  |                                                  |                                                              |
+| IHttpService                     | 五、HTTP数据包的处理                             | https://github.com/PortSwigger/example-traffic-redirector    |
+| IInterceptedProxyMessage         |                                                  |                                                              |
+| IIntruderAttack                  |                                                  |                                                              |
+| IIntruderPayloadGenerator        |                                                  | https://github.com/PortSwigger/example-intruder-payloads     |
+| IIntruderPayloadGeneratorFactory |                                                  | https://github.com/PortSwigger/example-intruder-payloads     |
+| IIntruderPayloadProcessor        |                                                  | https://github.com/PortSwigger/example-intruder-payloads     |
+| IMenuItemHandler                 |                                                  |                                                              |
+| IMessageEditor                   |                                                  | https://github.com/PortSwigger/custom-logger                 |
+| IMessageEditorController         |                                                  | https://github.com/PortSwigger/custom-logger                 |
+| IMessageEditorTab                |                                                  | https://github.com/bit4woo/u2c<br />https://github.com/PortSwigger/example-custom-editor-tab |
+| IMessageEditorTabFactory         |                                                  | https://github.com/bit4woo/u2c<br />https://github.com/PortSwigger/example-custom-editor-tab |
+| IParameter                       | 五、HTTP数据包的处理                             |                                                              |
+| IProxyListener                   |                                                  | https://github.com/PortSwigger/example-event-listeners       |
+| IRequestInfo                     | 五、HTTP数据包的处理                             |                                                              |
+| IResponseInfo                    | 五、HTTP数据包的处理                             |                                                              |
+| IResponseKeywords                |                                                  |                                                              |
+| IResponseVariations              |                                                  |                                                              |
+| IScanIssue                       |                                                  | https://github.com/PortSwigger/example-scanner-checks        |
+| IScannerCheck                    |                                                  | https://github.com/PortSwigger/example-scanner-checks        |
+| IScannerInsertionPoint           |                                                  | https://github.com/PortSwigger/example-custom-scan-insertion-points |
+| IScannerInsertionPointProvider   |                                                  | https://github.com/PortSwigger/example-custom-scan-insertion-points |
+| IScannerListener                 |                                                  | https://github.com/PortSwigger/example-event-listeners       |
+| IScanQueueItem                   |                                                  |                                                              |
+| IScopeChangeListener             |                                                  |                                                              |
+| ISessionHandlingAction           |                                                  | https://github.com/PortSwigger/example-custom-session-tokens |
+| ITab                             |                                                  | https://github.com/PortSwigger/custom-logger                 |
+| ITempFile                        |                                                  |                                                              |
+| ITextEditor                      |                                                  |                                                              |
 
 
 
@@ -415,7 +415,7 @@ MenuItem
 
 https://github.com/PortSwigger/example-event-listeners/blob/master/java/BurpExtender.java
 
-# 五、HTTP数据包的处理（获取\修改\更新）
+# 五、HTTP数据包的处理
 
 ### 常用HTTP信息处理方法
 
@@ -427,23 +427,25 @@ https://github.com/bit4woo/burp-api-common/blob/master/src/main/java/burp/Helper
 
 操作无非“增删查改”四种，下面这都代码对常用操作均进行了演示
 
-请求包：
+​		请求包：
 
-​		header 的获取、删除、新增、修改
+- ​		header 的获取、删除、新增、修改
 
-​		body 的获取、修改
+- ​		body 的获取、修改
 
-​		parameter 的获取、删除、新增、修改
+- ​		parameter 的获取、删除、新增、修改
 
-响应包：
+- ​		发送一个新的请求
+  响应包：
 
-​		header 的获取、删除、新增、修改
+- ​		header 的获取、删除、新增、修改
 
-​		body 的获取、修改
+- ​		body 的获取、修改
 
-httpService:
+  httpService:
 
-​		host、port、protocol 的获取、修改
+- ​		host、port、protocol 的获取、修改
+
 
 ```java
 package burp;
@@ -562,123 +564,195 @@ public class BurpExtender implements IBurpExtender, IHttpListener
 }
 ```
 
-发送一个新的请求
-
-```
-    IHttpRequestResponse makeHttpRequest(IHttpService httpService,
-            byte[] request);
-            
-    byte[] makeHttpRequest(
-            String host,
-            int port,
-            boolean useHttps,
-            byte[] request);
-```
 
 
+# 六、访问burp中的关键数据
 
-# 六、访问burp中的一些关键数据
+主要任务：
 
-## 从Scanner issues中收集邮箱地址
+- 鼠标右键的创建
 
-```
-	public static Set<String> collectEmails() {
-		Set<String> Emails = new HashSet<>();
-		IScanIssue[]  issues =  BurpExtender.getCallbacks().getScanIssues(null);
+- 从Scanner issues中收集邮箱地址
 
-		final String REGEX_EMAIL = "[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+";
-		Pattern pDomainNameOnly = Pattern.compile(REGEX_EMAIL);
+- 从Proxy history中查找最新cookie
 
-		for (IScanIssue issue:issues) {
-			if (issue.getIssueName().equalsIgnoreCase("Email addresses disclosed")) {
-				String detail = issue.getIssueDetail();
-				Matcher matcher = pDomainNameOnly.matcher(detail);
-				while (matcher.find()) {//多次查找
-					String email = matcher.group();
-					if (domainResult.isRelatedEmail(email)) {
-						Emails.add(matcher.group());
+- 发起扫描任务、发起爬行任务
+
+- 查询和更新scope 
+
+
+
+
+完整源码地址：https://github.com/bit4woo/burp-api-drops/blob/master/src/burp/Lession6.java
+
+```java
+package burp;
+
+import java.awt.MenuItem;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.PrintWriter;
+import java.lang.reflect.Array;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.swing.JMenuItem;
+
+
+public class BurpExtender implements IBurpExtender, IContextMenuFactory
+{//所有burp插件都必须实现IBurpExtender接口，而且实现的类必须叫做BurpExtender
+	private IBurpExtenderCallbacks callbacks;
+	private IExtensionHelpers helpers;
+
+	private PrintWriter stdout;
+	private PrintWriter stderr;
+	private String ExtenderName = "burp extender api drops by bit4woo";
+
+	@Override
+	public void registerExtenderCallbacks(IBurpExtenderCallbacks callbacks)
+	{//IBurpExtender必须实现的方法
+		stdout = new PrintWriter(callbacks.getStdout(), true);
+		stderr = new PrintWriter(callbacks.getStderr(), true);
+		callbacks.printOutput(ExtenderName);
+		//stdout.println(ExtenderName);
+		this.callbacks = callbacks;
+		helpers = callbacks.getHelpers();
+		callbacks.setExtensionName(ExtenderName); 
+		callbacks.registerContextMenuFactory(this);
+	}
+
+	@Override
+	public List<JMenuItem> createMenuItems(IContextMenuInvocation invocation) {
+		
+		ArrayList<JMenuItem> menu_item_list = new ArrayList<JMenuItem>();
+
+		//常用
+		JMenuItem printEmails = new JMenuItem("Print Emails");
+		printEmails.addActionListener(new printEmails(invocation));
+		menu_item_list.add(printEmails);
+
+		JMenuItem printCookie = new JMenuItem("find last cookie of Url");
+		printCookie.addActionListener(new printCookies(invocation));
+		menu_item_list.add(printCookie);
+
+		JMenuItem scan = new JMenuItem("scan this url");
+		scan.addActionListener(new printCookies(invocation));
+		menu_item_list.add(scan);
+		
+		return menu_item_list;
+
+	}
+	
+	public class printEmails implements ActionListener{
+		private IContextMenuInvocation invocation;
+
+		public printEmails(IContextMenuInvocation invocation) {
+			this.invocation  = invocation;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			IScanIssue[]  issues =  callbacks.getScanIssues(null);
+
+			final String REGEX_EMAIL = "[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+";
+			Pattern pDomainNameOnly = Pattern.compile(REGEX_EMAIL);
+
+			for (IScanIssue issue:issues) {
+				if (issue.getIssueName().equalsIgnoreCase("Email addresses disclosed")) {
+					String detail = issue.getIssueDetail();
+					Matcher matcher = pDomainNameOnly.matcher(detail);
+					while (matcher.find()) {//多次查找
+						String email = matcher.group();
+						System.out.println(matcher.group());
 					}
-					System.out.println(matcher.group());
 				}
 			}
 		}
-		return Emails;
 	}
+	
+	public class printCookies implements ActionListener{
+		private IContextMenuInvocation invocation;
+
+		public printCookies(IContextMenuInvocation invocation) {
+			this.invocation  = invocation;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			try {
+				IHttpRequestResponse[] messages = invocation.getSelectedMessages();
+				byte[] req = messages[0].getRequest();
+				String currentShortUrl = messages[0].getHttpService().toString();
+				stdout.println(currentShortUrl);
+				
+				/*******************从Proxy history中查找最新cookie***************************/
+		        IHttpRequestResponse[]  historyMessages = callbacks.getProxyHistory();
+		        int len =  historyMessages.length;
+		        for (int index=len; index >=0; index--) {
+		        	IHttpRequestResponse item = historyMessages[index];
+		        	
+		            String hisShortUrl = item.getHttpService().toString();
+		            if (currentShortUrl.equals(hisShortUrl)) {
+			            IRequestInfo hisanalyzedRequest = helpers.analyzeRequest(item);
+			            List<String> headers = hisanalyzedRequest.getHeaders();
+
+			            for (String header:headers) {
+			            	if (header.startsWith("Cookie:")) {
+			            		stdout.println("找到cookie---"+header);
+			            	}
+			            }
+		            }
+		        }
+			} catch (Exception e) {
+				callbacks.printError(e.getMessage());
+			}
+		}
+	}
+	
+	public class scan implements ActionListener{
+		private IContextMenuInvocation invocation;
+
+		public scan(IContextMenuInvocation invocation) {
+			this.invocation  = invocation;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			try {
+				IHttpRequestResponse[] messages = invocation.getSelectedMessages();
+				for (IHttpRequestResponse message:messages) {
+					byte[] req = message.getRequest();
+					IRequestInfo analyzedRequest = helpers.analyzeRequest(req);
+					URL url = analyzedRequest.getUrl();
+					IHttpService service = message.getHttpService();
+					boolean useHttps = service.getProtocol().equalsIgnoreCase("https");
+					/******************发起扫描任务************************/
+					callbacks.doActiveScan(service.getHost(), service.getPort(), useHttps, req);
+					stdout.println(url.toString()+"被加入了扫描队列");
+					/******************发起爬行任务************************/
+					callbacks.sendToSpider(url);
+					
+					/******************查询URL是否在scope中************************/
+					if (callbacks.isInScope(url)) {
+						/******************从scope中移除************************/
+						callbacks.excludeFromScope(url);
+					}
+					URL shortUrl = new URL(service.toString());
+					/******************加入scope中************************/
+					callbacks.includeInScope(shortUrl);
+				}
+			} catch (Exception e) {
+				callbacks.printError(e.getMessage());
+			}
+		}
+	}
+}
 ```
-
-
-
-## 从Proxy history中查找最新cookie
-
-```
-    public static HeaderEntry getLatestHeaderFromHistory(String shortUrl,String headerName){
-
-    	shortUrl = Getter.formateURLString(shortUrl);//url格式标准化，以保证后面比较的准确性。
-        IHttpRequestResponse[]  historyMessages = Reverse(BurpExtender.callbacks.getProxyHistory());
-        Getter getter = new Getter(BurpExtender.callbacks.getHelpers());
-
-        for (IHttpRequestResponse historyMessage:historyMessages) {
-            String hisShortUrl = getter.getShortURL(historyMessage).toString();
-
-            if (hisShortUrl.equalsIgnoreCase(shortUrl)) {
-                String cookieValue = getter.getHeaderValueOf(true,historyMessage,headerName);
-                if (cookieValue != null){
-                	HeaderEntry entry = new HeaderEntry(shortUrl,headerName,cookieValue, null);
-                	return entry;
-                }
-            }
-        }
-
-        return null;
-    }
-```
-
-
-
-## 发起扫描任务、发起爬行任务
-
-```
-doActiveScan
-
-IScanQueueItem doActiveScan(
-            String host,
-            int port,
-            boolean useHttps,
-            byte[] request)
-            
-    IScanQueueItem doActiveScan(
-            String host,
-            int port,
-            boolean useHttps,
-            byte[] request,
-            List<int[]> insertionPointOffsets)
-            
-    void doPassiveScan(
-            String host,
-            int port,
-            boolean useHttps,
-            byte[] request,
-            byte[] response)
-            
-            
-sendToSpider
-```
-
-
-
-## 查询和更新scope
-
-    boolean isInScope(java.net.URL url);
-    void includeInScope(java.net.URL url)
-    void excludeFromScope(java.net.URL url);
-    
-    IContextMenuFactory
-    IContextMenuInvocation
-
-
-​    
-
-
 
 
 
