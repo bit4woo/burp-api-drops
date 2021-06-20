@@ -41,7 +41,7 @@ API快速索引 ：
 | IScannerListener                 |                                                  | https://github.com/PortSwigger/example-event-listeners       |
 | IScanQueueItem                   |                                                  |                                                              |
 | IScopeChangeListener             |                                                  |                                                              |
-| ISessionHandlingAction           |                                                  | https://github.com/PortSwigger/example-custom-session-tokens |
+| ISessionHandlingAction           | 七、ISessionHandlingAction的使用                 | https://github.com/PortSwigger/example-custom-session-tokens<br />https://github.com/bit4woo/burp-api-drops/blob/master/src/burp/Lession7.java |
 | ITab                             |                                                  | https://github.com/PortSwigger/custom-logger                 |
 | ITempFile                        |                                                  |                                                              |
 | ITextEditor                      |                                                  |                                                              |
@@ -331,6 +331,10 @@ java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -Xbootcl
 
 ![image-20210103175220054](README.assets/image-20210103175220054.png)
 
+比较新的版本中，日志功能还得到了加强，对我们的调试日志查看更加方便。
+
+![image-20210619173015514](README.assets/image-20210619173015514.png)
+
 # 四、学习思路和核心逻辑
 
 ## 向官方文档和API学习
@@ -436,7 +440,6 @@ https://github.com/bit4woo/burp-api-common/blob/master/src/main/java/burp/Helper
 - ​		parameter 的获取、删除、新增、修改
 
 - ​		发送一个新的请求
-  
 #### 响应包：
 
 - ​		header 的获取、删除、新增、修改
@@ -761,15 +764,307 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory
 
 
 
-# 七、Session Tokens 本质也是请求包的修改
+# 七、ISessionHandlingAction的使用
 
-https://github.com/PortSwigger/example-custom-session-tokens
+我们使用 https://github.com/PortSwigger/example-custom-session-tokens 当中的案例。
+
+## web服务启动
+
+下载并安全安装[nodejs](https://nodejs.org/en/) ，并将安装路径（node.exe所在路径）加入到环境变量；运行如下命令，启动web服务。
+
+```bash
+git clone https://github.com/PortSwigger/example-custom-session-tokens
+cd example-custom-session-tokens/server
+node server.js
+```
+
+## web服务的处理逻辑说明
+
+```js
+//https://raw.githubusercontent.com/PortSwigger/example-custom-session-tokens/master/server/server.js
+const http = require('http');
+
+const PORT = 8000;
+
+const SESSION_ID_KEY = 'X-Custom-Session-Id' 
+
+const parseQueryString = str => str
+  .split('&')
+  .map(pair => {
+    const idx = pair.indexOf('=');
+    if (idx === -1) return null;
+    return [pair.substr(0, idx), pair.substr(idx+1)];
+  })
+  .reduce((acc, kvp) => {
+    if (kvp !== null) acc[unescape(kvp[0])] = unescape(kvp[1]);
+    return acc;
+  }, {});
+
+const SESSIONS = [];
+
+console.log(`Serving on http://localhost:${PORT}, press ctrl+c to stop`);
+http.createServer((req, res) => {
+    //如果请求路径是/session，会进入Session Id的判断逻辑
+  if (req.url == "/session") {
+      //看X-Custom-Session-Id这个header是否存在，如果存在，会尝试把它的值解析为int，并判断是否在服务器的记录中。
+    if (SESSION_ID_KEY.toLowerCase() in req.headers && parseInt(req.headers[SESSION_ID_KEY.toLowerCase()]) in SESSIONS) {
+      const session = parseInt(req.headers[SESSION_ID_KEY.toLowerCase()]);
+      if (req.method === 'POST') {//如果是post请求，则接受请求的body并回显
+        const body = [];
+        req.on('data', chunk => {
+          body.push(chunk);
+        }).on('end', () => {
+          SESSIONS[session] += Buffer.concat(body).toString();
+          res.end(SESSIONS[session]);
+        });
+      } else {//非POST请求则直接回显当前session的值。所以POST提交的内容，可以在相同session ID的get请求中显示出来。
+          //也就存在存储型XSS。
+        res.end(SESSIONS[session]);
+      }
+    } else {//请求中不存在X-Custom-Session-Id这个header，或者它的值不存在，就随机创建一个新的session。
+      const sessionId = Math.round(Math.random() * 10000);
+      SESSIONS[sessionId] = "";
+      res.setHeader(SESSION_ID_KEY, sessionId);
+      res.end(SESSIONS[sessionId]);
+    }
+  } else {
+    res.end(`
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <title>Demo</title>
+</head>
+<body>
+    <form id=form>
+    Input: <input type="text" name="input" />
+    <input type="submit" value="Submit" />
+    </form>
+    <br />
+    <div id=session></div>
+
+    <script type="text/javascript">
+      sessionId = null;
+
+      function updateSession(data) {
+        if (sessionId === null) {
+          // get session id
+          return fetch("session")
+            .then(function (res) {
+              sessionId = res.headers.get('${SESSION_ID_KEY}');
+              return updateSession(data);
+            });
+        } else {
+          var h = new Headers();
+          h.append('${SESSION_ID_KEY}', sessionId);
+
+          return fetch("session", {method: 'POST', body: data, headers: h})
+            .then(function (res) {
+              return res.text();
+            });
+        }
+      }
+
+      document.getElementById("form").onsubmit = function ()
+      {
+          updateSession(document.forms[0].input.value)
+            .then(function (data) {
+              document.getElementById("session").innerHTML = data;
+            });
+
+          return false;
+      };
+    </script>
+</body>
+</html>
+    `);
+  }
+}).listen(PORT, 'localhost');
+```
+
+## 我们的目标和实现步骤
+
+我们的目标是让burp通过扫描程序发现上面这个XSS漏洞。实现步骤如下，只有做到以下几点，才能通过扫描发现这个漏洞：
+
+1、获取到一个可用的session id，这一点可用通过burp的宏（macro ）来做到。
+
+2、在burp的扫描过程中，都将session id放入到 POST请求的header中，burp会自动在body中插入检测的扫描payload。修改header这一点，就需要通过我们的插件程序来完成了，这才是我们需要做的。
+
+3、配置burp的Session handling rules，让burp把我们的插件用起来，让插件起作用。
+
+### 添加宏以获取x-custom-session-id
+
+Burp -> Project options -> Sessions -> Macros -> Add
+
+如下是burp官方的实例代码，我只是在其中加入了中文备注而已。
+
+https://github.com/bit4woo/burp-api-drops/blob/master/src/burp/Lession7FromPortSwigger.java
+
+```java
+package burp;
+
+import java.util.Arrays;
+import java.util.List;
+
+//!!!要使用这个文件中的代码，需要先将文件名改为BurpExtender.java
+//来自 https://github.com/PortSwigger/example-custom-session-tokens/blob/master/java/BurpExtender.java
+//只是添加了中文备注
+public class BurpExtender implements IBurpExtender, ISessionHandlingAction
+{
+	private static final String SESSION_ID_KEY = "X-Custom-Session-Id:";
+	private static final byte[] SESSION_ID_KEY_BYTES = SESSION_ID_KEY.getBytes();
+	private static final byte[] NEWLINE_BYTES = new byte[] { '\r', '\n' };
+
+	private IExtensionHelpers helpers;
+
+	// 实现 IBurpExtender类
+	@Override
+	public void registerExtenderCallbacks(IBurpExtenderCallbacks callbacks)
+	{
+		// 保存helpers供后续使用
+		this.helpers = callbacks.getHelpers();
+
+		// 设置插件名称
+		callbacks.setExtensionName("Session token example");
+		callbacks.registerSessionHandlingAction(this);
+	}
+
+	// 实现 ISessionHandlingAction
+	@Override
+	public String getActionName()
+	{
+		return "Use session token from macro";
+	}
+
+	@Override
+	public void performAction(
+			IHttpRequestResponse currentRequest,
+			IHttpRequestResponse[] macroItems)
+	{
+		if (macroItems.length == 0) return;
+
+		//提取响应包的headers
+		final byte[] finalResponse = macroItems[macroItems.length - 1].getResponse();
+		if (finalResponse == null) return;
+
+		final List<String> headers = helpers.analyzeResponse(finalResponse).getHeaders();
+
+		String sessionToken = null;
+		for (String header : headers)
+		{
+			// 跳过非"X-Custom-Session-Id"开头的header
+			if (!header.startsWith(SESSION_ID_KEY)) continue;
+
+			// 获取token值
+			sessionToken = header.substring((SESSION_ID_KEY).length()).trim();
+		}
+
+		// 如果失败就返回
+		if (sessionToken == null) return;
+
+		final byte[] req = currentRequest.getRequest();
+		
+		//获取token key的开始位置和结束位置
+		final int sessionTokenKeyStart = helpers.indexOf(req, SESSION_ID_KEY_BYTES, false, 0, req.length);
+		final int sessionTokenKeyEnd = helpers.indexOf(req, NEWLINE_BYTES, false, sessionTokenKeyStart, req.length);
+
+		// 组合新的请求包，实现token值的替换
+		currentRequest.setRequest(join(
+				Arrays.copyOfRange(req, 0, sessionTokenKeyStart),
+				helpers.stringToBytes(String.format("%s %s", SESSION_ID_KEY, sessionToken)),
+				Arrays.copyOfRange(req, sessionTokenKeyEnd, req.length)
+				));
+	}
+
+	//拼接多个byte[]数组的方法
+	private static byte[] join(byte[]... arrays)
+	{
+		int len = 0;
+		for (byte[] arr : arrays)
+		{
+			len += arr.length;
+		}
+
+		byte[] result = new byte[len];
+		int idx = 0;
+
+		for (byte[] arr : arrays)
+		{
+			for (byte b : arr)
+			{
+				result[idx++] = b;
+			}
+		}
+
+		return result;
+	}
+}
+
+```
+
+
+
+如下是用了[常用处理方法](https://github.com/bit4woo/burp-api-common)的简化代码。完整源码地址：https://github.com/bit4woo/burp-api-drops/blob/master/src/burp/Lession7.java
+
+```java
+package burp;
+
+public class BurpExtender implements IBurpExtender, ISessionHandlingAction
+{
+	private static final String SESSION_ID_KEY = "X-Custom-Session-Id";
+
+	private IExtensionHelpers helpers;
+
+	// 实现 IBurpExtender类
+	@Override
+	public void registerExtenderCallbacks(IBurpExtenderCallbacks callbacks)
+	{
+		// 保持helpers供后续使用
+		this.helpers = callbacks.getHelpers();
+
+		// 设置插件名称
+		callbacks.setExtensionName("Session token example");
+		callbacks.registerSessionHandlingAction(this);
+	}
+
+	// 实现 ISessionHandlingAction
+	@Override
+	public String getActionName()
+	{
+		return "Use session token from macro";
+	}
+
+	@Override
+	public void performAction(
+			IHttpRequestResponse currentRequest,
+			IHttpRequestResponse[] macroItems)
+	{
+		if (macroItems.length == 0) return;
+
+		// 从宏的配置的请求当中获取response
+		final byte[] finalResponse = macroItems[macroItems.length - 1].getResponse();
+		if (finalResponse == null) return;
+		
+		HelperPlus hp = new HelperPlus(helpers);
+		//获取我们想要的session id
+		String sessionToken = hp.getHeaderValueOf(false, finalResponse, SESSION_ID_KEY);
+
+		// 如果获取失败，就返回
+		if (sessionToken == null) return;
+
+		final byte[] req = currentRequest.getRequest();
+		//用获取到的session id修改当前数据包。
+		byte[] newReq = hp.addOrUpdateHeader(true, req, SESSION_ID_KEY, sessionToken);
+		currentRequest.setRequest(newReq);
+	}
+}
+
+```
 
 
 
 # 八、IMessageEditorTab
 
-
+U2C
 
 # 九、自定义UI界面\菜单
 
