@@ -981,7 +981,7 @@ public class BurpExtender implements IBurpExtender, ISessionHandlingAction
 		int len = 0;
 		for (byte[] arr : arrays)
 		{
-			len += arr.length;
+			len += arr.length;//计算多个数组的长度总和
 		}
 
 		byte[] result = new byte[len];
@@ -1050,11 +1050,9 @@ public class BurpExtender implements IBurpExtender, ISessionHandlingAction
 
 		// 如果获取失败，就返回
 		if (sessionToken == null) return;
-
-		final byte[] req = currentRequest.getRequest();
+		
 		//用获取到的session id修改当前数据包。
-		byte[] newReq = hp.addOrUpdateHeader(true, req, SESSION_ID_KEY, sessionToken);
-		currentRequest.setRequest(newReq);
+		currentRequest = hp.addOrUpdateHeader(true, currentRequest, SESSION_ID_KEY, sessionToken);
 	}
 }
 
@@ -1064,7 +1062,21 @@ public class BurpExtender implements IBurpExtender, ISessionHandlingAction
 
 # 八、IMessageEditorTab
 
-U2C
+https://github.com/PortSwigger/example-custom-editor-tab/blob/master/java/BurpExtender.java
+
+https://github.com/bit4woo/u2c
+
+IMessageEditor
+
+IMessageEditorController 
+
+
+
+IMessageEditorTab
+
+IMessageEditorTabFactory 创建一个新的tab，比如U2C
+
+
 
 # 九、自定义UI界面\菜单
 
