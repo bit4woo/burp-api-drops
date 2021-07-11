@@ -1066,21 +1066,180 @@ https://github.com/PortSwigger/example-custom-editor-tab/blob/master/java/BurpEx
 
 https://github.com/bit4woo/u2c
 
-IMessageEditor
+```
+IMessageEditor：burp现有的进行HTTP数据包展示和编辑的组件，平常用burp基本天天都在用，编程时主要的使用场景就是你自己的插件要显示或编辑数据包的时候。
+IMessageEditorController ：主要目的是传递“当前”HTTP数据包的信息，通过它获取到HTTP数据包的请求、响应等详细信息。
+----这2个放到《九、自定义UI界面》中讲
 
-IMessageEditorController 
 
+IMessageEditorTab ：IMessageEditor上面一个新的tab，用于做一些特殊格式数据的显示和编辑。比如，显示Unicode转为中文后的结果，base64解码后的结果。
+IMessageEditorTabFactory ：创建新的tab的工厂类，专门创建Tab对象。
+```
 
+完整源码地址：https://github.com/bit4woo/burp-api-drops/blob/master/src/burp/Lession8.java
 
-IMessageEditorTab
+```java
+package burp;
 
-IMessageEditorTabFactory 创建一个新的tab，比如U2C
+import java.awt.Component;
+//!!!要使用这个文件中的代码，需要先将文件名改为BurpExtender.java
+public class BurpExtender implements IBurpExtender, IMessageEditorTabFactory
+{
+    private IBurpExtenderCallbacks callbacks;
+    private IExtensionHelpers helpers;
+
+    //
+    // implement IBurpExtender
+    // 实现IBurpExtender接口
+    //
+
+    @Override
+    public void registerExtenderCallbacks(IBurpExtenderCallbacks callbacks)
+    {
+        // keep a reference to our callbacks object
+        this.callbacks = callbacks;
+
+        // obtain an extension helpers object  获取helpers对象
+        helpers = callbacks.getHelpers();
+
+        // set our extension name 设置插件名称
+        callbacks.setExtensionName("Serialized input editor");
+
+        // register ourselves as a message editor tab factory
+        // 把我们当前对象注册成为 “message editor tab”的工厂
+        callbacks.registerMessageEditorTabFactory(this);
+    }
+
+    //
+    // implement IMessageEditorTabFactory 实现IMessageEditorTabFactory接口
+    // burp显示HTTP数据包是通过IMessageEditor，每次创建一个新的IMessageEditor时，都会调用这个函数。
+    //
+
+    @Override
+    public IMessageEditorTab createNewInstance(IMessageEditorController controller, boolean editable)
+    {
+        // create a new instance of our custom editor tab
+        // 创建一个新的实例，我们自定义的编辑tab的实例
+        return new Base64InputTab(controller, editable);
+    }
+
+    //
+    // class implementing IMessageEditorTab
+    // 实现IMessageEditorTab类
+    //
+
+    class Base64InputTab implements IMessageEditorTab
+    {
+        private boolean editable;
+        private ITextEditor txtInput;
+        private byte[] currentMessage;
+
+        public Base64InputTab(IMessageEditorController controller, boolean editable)
+        {
+            this.editable = editable;
+            // create an instance of Burp's text editor, to display our deserialized data
+            txtInput = callbacks.createTextEditor();
+            txtInput.setEditable(editable);
+        }
+
+        //
+        // implement IMessageEditorTab
+        //
+
+        @Override
+        public String getTabCaption() //tab的名称
+        {
+            return "Serialized input";
+        }
+
+        @Override
+        public Component getUiComponent()
+        {
+            return txtInput.getComponent();//组件
+        }
+
+        @Override
+        public boolean isEnabled(byte[] content, boolean isRequest)//是否启用当前tab
+        {
+            // enable this tab for requests containing a data parameter
+            // 是请求包，并且有一个data参数时启用
+            return isRequest && null != helpers.getRequestParameter(content, "data");
+        }
+
+        @Override
+        public void setMessage(byte[] content, boolean isRequest)
+        {//控制文本框的显示内容。
+            if (content == null)
+            {
+                // clear our display 清空显示内容
+                txtInput.setText(null);
+                txtInput.setEditable(false);
+            }
+            else
+            {
+                // retrieve the data parameter  获取data参数
+                IParameter parameter = helpers.getRequestParameter(content, "data");
+
+                // deserialize the parameter value 反序列化参数的值，也就是base64解码
+                txtInput.setText(helpers.base64Decode(helpers.urlDecode(parameter.getValue())));
+                txtInput.setEditable(editable);
+            }
+
+            // remember the displayed content
+            currentMessage = content;
+        }
+
+        @Override
+        public byte[] getMessage()
+        {
+            // determine whether the user modified the deserialized data
+            // 判断文本框中的内容是否被用户修改过了
+            if (txtInput.isTextModified())
+            {
+                // reserialize the data 从新序列号，即base64编码。
+                byte[] text = txtInput.getText();
+                String input = helpers.urlEncode(helpers.base64Encode(text));
+
+                // update the request with the new parameter value
+                //根据用户的修改来更新当前的请求数据包。
+                return helpers.updateParameter(currentMessage, helpers.buildParameter("data", input, IParameter.PARAM_BODY));
+            }
+            else return currentMessage;
+        }
+
+        @Override
+        public boolean isModified()
+        {
+            return txtInput.isTextModified();
+        }
+
+        @Override
+        public byte[] getSelectedData()
+        {
+            return txtInput.getSelectedText();
+        }
+    }
+}
+
+```
 
 
 
 # 九、自定义UI界面\菜单
 
-## 使用windowsBuilder
+图形界面的设计，我们借助eclipse中的windowsBuilder，它可以通过拖拽等方式来快速实现图形界面的设计，同时方便预览和调试图形界面编写中的问题。
+
+安装windowsBuilder
+
+![image-20210711170549092](README.assets/image-20210711170549092.png)
+
+![image-20210711170739638](README.assets/image-20210711170739638.png)
+
+![image-20210711171136991](README.assets/image-20210711171136991.png)
+
+![image-20210711171214011](README.assets/image-20210711171214011.png)
+
+ITab
 
 
 
