@@ -1225,11 +1225,15 @@ public class BurpExtender implements IBurpExtender, IMessageEditorTabFactory
 
 
 
-# 九、自定义UI界面\菜单
+# 九、自定义UI界面
 
-图形界面的设计，我们借助eclipse中的windowsBuilder，它可以通过拖拽等方式来快速实现图形界面的设计，同时方便预览和调试图形界面编写中的问题。
+本节课目标：
 
-安装windowsBuilder
+A、通过WindowBuilder设计一个图形界面插件。图形界面的设计，我们借助eclipse中的WindowBuilder，它可以通过拖拽等方式来快速实现图形界面的设计，同时方便预览和调试图形界面编写中的问题。
+
+B、图形界面通过按钮事件来显示一个HTTP数据包的详细信息。从而也实践IMessageEditor、IMessageEditorController的内容。
+
+1. 安装WindowBuilder
 
 ![image-20210711170549092](README.assets/image-20210711170549092.png)
 
@@ -1239,7 +1243,205 @@ public class BurpExtender implements IBurpExtender, IMessageEditorTabFactory
 
 ![image-20210711171214011](README.assets/image-20210711171214011.png)
 
-ITab
+2. 在项目中创建图形界面的基础类。
+
+![image-20210711172122121](README.assets/image-20210711172122121.png)
+
+![image-20210711172037780](README.assets/image-20210711172037780.png)
+
+![image-20210711172308799](README.assets/image-20210711172308799.png)
+
+![image-20210711172420456](README.assets/image-20210711172420456.png)
+
+完整源码地址：https://github.com/bit4woo/burp-api-drops/blob/master/src/burp/Lession9.java
+
+```java
+package burp;
+
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.swing.JMenuItem;
+
+//!!!要使用这个文件中的代码，需要先将文件名改为BurpExtender.java
+public class BurpExtender implements IBurpExtender, ITab,IContextMenuFactory
+{
+    private static IBurpExtenderCallbacks callbacks;
+    private IExtensionHelpers helpers;
+    GUI gui;
+    
+    //
+    // implement IBurpExtender
+    // 实现IBurpExtender接口
+    //
+
+    @Override
+    public void registerExtenderCallbacks(IBurpExtenderCallbacks callbacks)
+    {
+        // keep a reference to our callbacks object
+        this.callbacks = callbacks;
+
+        // obtain an extension helpers object  获取helpers对象
+        helpers = callbacks.getHelpers();
+
+        // set our extension name 设置插件名称
+        callbacks.setExtensionName("Custom GUI");
+		gui = new GUI();
+        // 添加tab
+        callbacks.addSuiteTab(this);
+        callbacks.registerContextMenuFactory(this);
+    }
+
+	@Override
+	public String getTabCaption() {
+		return "Custom GUI";
+	}
+
+	@Override
+	public Component getUiComponent() {
+		return gui.getComponent(0);
+	}
+
+	public static IBurpExtenderCallbacks getCallbacks() {
+		return callbacks;
+	}
+
+	@Override
+	public List<JMenuItem> createMenuItems(IContextMenuInvocation invocation) {
+		ArrayList<JMenuItem> menu_item_list = new ArrayList<JMenuItem>();
+
+		JMenuItem sendto = new JMenuItem("sendtoGUI");
+		sendto.addActionListener(new sendto(invocation));
+		menu_item_list.add(sendto);
+		
+		return menu_item_list;
+	}
+	
+	public class sendto implements ActionListener{
+		private IContextMenuInvocation invocation;
+
+		public sendto(IContextMenuInvocation invocation) {
+			this.invocation  = invocation;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			IHttpRequestResponse[] messages = invocation.getSelectedMessages();
+			if (messages != null && messages.length >0) {
+				gui.setGUIMessage(messages[0]);
+			}
+			System.out.println(Arrays.toString(gui.getRequest()));
+		}
+	}
+}
+```
+
+完整源码地址：https://github.com/bit4woo/burp-api-drops/blob/master/src/burp/GUI.java
+
+```java
+package burp;
+
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JTable;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+/** 
+* @author bit4woo
+* @github https://github.com/bit4woo 
+* @version CreateTime：2021年7月11日 下午5:22:02 
+*/
+//Lession9对应的源码
+public class GUI extends JFrame implements IMessageEditorController {
+
+	private JPanel contentPane;
+	private IHttpRequestResponse GUIMessage;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					GUI frame = new GUI();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public GUI() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 450, 300);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setLayout(new BorderLayout(0, 0));
+		setContentPane(contentPane);
+		
+		//添加一个editor，用于显示HTTP数据包
+		IMessageEditor editor = BurpExtender.getCallbacks().createMessageEditor(this, false);
+		contentPane.add(editor.getComponent(), BorderLayout.CENTER);
+		
+		JPanel panel = new JPanel();
+		contentPane.add(panel, BorderLayout.NORTH);
+		
+		JButton btnNewButton = new JButton("displayRequest");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				editor.setMessage(getRequest(), true);//调用IMessageEditorController的函数来显示请求包
+			}
+		});
+		panel.add(btnNewButton);
+		
+		JButton btnNewButton_1 = new JButton("displayResponse");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				editor.setMessage(getResponse(), true);//调用IMessageEditorController的函数来显示响应包
+			}
+		});
+		panel.add(btnNewButton_1);
+	}
+	
+	@Override //IMessageEditorController的函数
+	public IHttpService getHttpService() {
+		return GUIMessage.getHttpService();
+	}
+
+	@Override //IMessageEditorController的函数
+	public byte[] getRequest() {
+		return GUIMessage.getRequest();
+	}
+
+	@Override //IMessageEditorController的函数
+	public byte[] getResponse() {
+		return GUIMessage.getResponse();
+	}
+
+	public IHttpRequestResponse getGUIMessage() {
+		return GUIMessage;
+	}
+
+	public void setGUIMessage(IHttpRequestResponse gUIMessage) {
+		GUIMessage = gUIMessage;
+	}
+}
+```
 
 
 
