@@ -4,8 +4,8 @@ API快速索引 ：
 
 | burp api                         | 相关课程                                         | 示例代码                                                     |
 | -------------------------------- | ------------------------------------------------ | ------------------------------------------------------------ |
-| IBurpCollaboratorClientContext   |                                                  |                                                              |
-| IBurpCollaboratorInteraction     |                                                  |                                                              |
+| IBurpCollaboratorClientContext   | 十、自定义扫描插件的开发                         |                                                              |
+| IBurpCollaboratorInteraction     | 十、自定义扫描插件的开发                         |                                                              |
 | IBurpExtender                    | 二、开发环境准备和Hello World                    | https://github.com/PortSwigger/example-hello-world           |
 | IBurpExtenderCallbacks           | 二、开发环境准备和Hello World                    | https://github.com/PortSwigger/example-hello-world           |
 | IContextMenuFactory              | 六、访问burp中的关键数据                         | https://github.com/bit4woo/knife<br />https://github.com/bit4woo/burp-api-drops/blob/master/src/burp/Lession6.java |
@@ -16,7 +16,7 @@ API快速索引 ：
 | IHttpListener                    | 四、学习思路和核心逻辑<br />五、HTTP数据包的处理 | https://github.com/PortSwigger/example-event-listeners<br />https://github.com/PortSwigger/custom-logger |
 | IHttpRequestResponse             | 五、HTTP数据包的处理                             | https://github.com/PortSwigger/example-traffic-redirector<br />https://github.com/PortSwigger/custom-logger |
 | IHttpRequestResponsePersisted    |                                                  |                                                              |
-| IHttpRequestResponseWithMarkers  |                                                  |                                                              |
+| IHttpRequestResponseWithMarkers  | 十、自定义扫描插件的开发                         |                                                              |
 | IHttpService                     | 五、HTTP数据包的处理                             | https://github.com/PortSwigger/example-traffic-redirector    |
 | IInterceptedProxyMessage         |                                                  |                                                              |
 | IIntruderAttack                  |                                                  |                                                              |
@@ -24,25 +24,25 @@ API快速索引 ：
 | IIntruderPayloadGeneratorFactory |                                                  | https://github.com/PortSwigger/example-intruder-payloads     |
 | IIntruderPayloadProcessor        |                                                  | https://github.com/PortSwigger/example-intruder-payloads     |
 | IMenuItemHandler                 |                                                  |                                                              |
-| IMessageEditor                   |                                                  | https://github.com/PortSwigger/custom-logger                 |
-| IMessageEditorController         |                                                  | https://github.com/PortSwigger/custom-logger                 |
-| IMessageEditorTab                |                                                  | https://github.com/bit4woo/u2c<br />https://github.com/PortSwigger/example-custom-editor-tab |
-| IMessageEditorTabFactory         |                                                  | https://github.com/bit4woo/u2c<br />https://github.com/PortSwigger/example-custom-editor-tab |
+| IMessageEditor                   | 八、IMessageEditorTab                            | https://github.com/PortSwigger/custom-logger                 |
+| IMessageEditorController         | 八、IMessageEditorTab                            | https://github.com/PortSwigger/custom-logger                 |
+| IMessageEditorTab                | 八、IMessageEditorTab                            | https://github.com/bit4woo/u2c<br />https://github.com/PortSwigger/example-custom-editor-tab |
+| IMessageEditorTabFactory         | 八、IMessageEditorTab                            | https://github.com/bit4woo/u2c<br />https://github.com/PortSwigger/example-custom-editor-tab |
 | IParameter                       | 五、HTTP数据包的处理                             |                                                              |
 | IProxyListener                   |                                                  | https://github.com/PortSwigger/example-event-listeners       |
 | IRequestInfo                     | 五、HTTP数据包的处理                             |                                                              |
 | IResponseInfo                    | 五、HTTP数据包的处理                             |                                                              |
 | IResponseKeywords                |                                                  |                                                              |
 | IResponseVariations              |                                                  |                                                              |
-| IScanIssue                       |                                                  | https://github.com/PortSwigger/example-scanner-checks        |
-| IScannerCheck                    |                                                  | https://github.com/PortSwigger/example-scanner-checks        |
-| IScannerInsertionPoint           |                                                  | https://github.com/PortSwigger/example-custom-scan-insertion-points |
-| IScannerInsertionPointProvider   |                                                  | https://github.com/PortSwigger/example-custom-scan-insertion-points |
+| IScanIssue                       | 十、自定义扫描插件的开发                         | https://github.com/PortSwigger/example-scanner-checks        |
+| IScannerCheck                    | 十、自定义扫描插件的开发                         | https://github.com/PortSwigger/example-scanner-checks        |
+| IScannerInsertionPoint           | 十、自定义扫描插件的开发                         | https://github.com/PortSwigger/example-custom-scan-insertion-points |
+| IScannerInsertionPointProvider   | 十、自定义扫描插件的开发                         | https://github.com/PortSwigger/example-custom-scan-insertion-points |
 | IScannerListener                 |                                                  | https://github.com/PortSwigger/example-event-listeners       |
 | IScanQueueItem                   |                                                  |                                                              |
 | IScopeChangeListener             |                                                  |                                                              |
 | ISessionHandlingAction           | 七、ISessionHandlingAction的使用                 | https://github.com/PortSwigger/example-custom-session-tokens<br />https://github.com/bit4woo/burp-api-drops/blob/master/src/burp/Lession7.java |
-| ITab                             |                                                  | https://github.com/PortSwigger/custom-logger                 |
+| ITab                             | 九、自定义UI界面                                 | https://github.com/PortSwigger/custom-logger                 |
 | ITempFile                        |                                                  |                                                              |
 | ITextEditor                      |                                                  |                                                              |
 
@@ -1447,13 +1447,251 @@ public class GUI extends JFrame implements IMessageEditorController {
 
 # 十、自定义扫描插件的开发
 
+测试所用漏洞服务器代码：https://github.com/PortSwigger/example-scanner-checks/blob/master/server/server.js 它的特点就是请求参数经过base64编码后进行传递的。
+
+完整源码地址：https://github.com/bit4woo/burp-api-drops/blob/master/src/burp/Lession10.java
+
+https://github.com/PortSwigger/example-scanner-checks/blob/master/java/BurpExtender.java
+
+```java
+package burp;
+
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+//!!!要使用这个文件中的代码，需要先将文件名改为BurpExtender.java
+public class BurpExtender implements IBurpExtender, IScannerCheck
+{
+    private IBurpExtenderCallbacks callbacks;
+    private IExtensionHelpers helpers;
+
+    //响应包中判断的关键词
+    private static final byte[] GREP_STRING = "Page generated by:".getBytes();
+    private static final byte[] INJ_TEST = "|".getBytes();
+    private static final byte[] INJ_ERROR = "Unexpected pipe".getBytes();
+    
+    //
+    // implement IBurpExtender 实现IBurpExtender接口
+    //
+    
+    @Override
+    public void registerExtenderCallbacks(final IBurpExtenderCallbacks callbacks)
+    {
+        //保持一个对callbacks对象的引用，后续需要用到
+        this.callbacks = callbacks;
+        
+        //获取helpers对象
+        helpers = callbacks.getHelpers();
+        
+        //设置插件名称
+        callbacks.setExtensionName("Custom scanner checks");
+        
+        //将当前对象、自己注册为一个“扫描插件”
+        callbacks.registerScannerCheck(this);
+    }
+    
+    /**
+     *  从响应包中搜索匹配一个字符串，并返回一个列表，列表中的元素是匹配成功的字符串的开始和结束位置
+     * @param response
+     * @param match
+     * @return
+     */
+    private List<int[]> getMatches(byte[] response, byte[] match)
+    {
+        List<int[]> matches = new ArrayList<int[]>();
+
+        int start = 0;
+        while (start < response.length)
+        {
+            start = helpers.indexOf(response, match, true, start, response.length);
+            if (start == -1)
+                break;
+            matches.add(new int[] { start, start + match.length });
+            start += match.length;
+        }
+        
+        return matches;
+    }
+
+    //
+    // 实现 IScannerCheck接口的函数
+    //
+    
+    @Override
+    public List<IScanIssue> doPassiveScan(IHttpRequestResponse baseRequestResponse)
+    {
+        //被动扫描，仅仅对响应包进行字符串匹配。
+        List<int[]> matches = getMatches(baseRequestResponse.getResponse(), GREP_STRING);
+        if (matches.size() > 0)
+        {
+            // 如果匹配成功，就报告漏洞
+            List<IScanIssue> issues = new ArrayList<>(1);
+            issues.add(new CustomScanIssue(
+                    baseRequestResponse.getHttpService(),
+                    helpers.analyzeRequest(baseRequestResponse).getUrl(), 
+                    new IHttpRequestResponse[] { callbacks.applyMarkers(baseRequestResponse, null, matches) }, 
+                    "CMS Info Leakage",
+                    "The response contains the string: " + helpers.bytesToString(GREP_STRING),
+                    "Information"));
+            return issues;
+        }
+        else return null;
+    }
+
+    @Override
+    public List<IScanIssue> doActiveScan(IHttpRequestResponse baseRequestResponse, IScannerInsertionPoint insertionPoint)
+    {
+        // 主动扫描，发送包含了我们的注入测试的请求。插入payload的位置在insertionPoint插入点的位置。
+        byte[] checkRequest = insertionPoint.buildRequest(INJ_TEST);
+        IHttpRequestResponse checkRequestResponse = callbacks.makeHttpRequest(
+                baseRequestResponse.getHttpService(), checkRequest);
+
+        // 在响应包中查找匹配的字符串
+        List<int[]> matches = getMatches(checkRequestResponse.getResponse(), INJ_ERROR);
+        if (matches.size() > 0)
+        {
+            // 获取payload在请求包中的位置，用于在UI中高亮显示
+            List<int[]> requestHighlights = new ArrayList<>(1);
+            requestHighlights.add(insertionPoint.getPayloadOffsets(INJ_TEST));
+
+            // 报告漏洞
+            List<IScanIssue> issues = new ArrayList<>(1);
+            issues.add(new CustomScanIssue(
+                    baseRequestResponse.getHttpService(),
+                    helpers.analyzeRequest(baseRequestResponse).getUrl(), 
+                    new IHttpRequestResponse[] { callbacks.applyMarkers(checkRequestResponse, requestHighlights, matches) }, 
+                    "Pipe injection",
+                    "Submitting a pipe character returned the string: " + helpers.bytesToString(INJ_ERROR),
+                    "High"));
+            return issues;
+        }
+        else return null;
+    }
+
+    @Override //漏洞去重函数，可以根据自己的需求，根据不同的参数来判断是否重复，比如URL、漏洞名称等
+    public int consolidateDuplicateIssues(IScanIssue existingIssue, IScanIssue newIssue)
+    {
+        // This method is called when multiple issues are reported for the same URL 
+        // path by the same extension-provided check. The value we return from this 
+        // method determines how/whether Burp consolidates the multiple issues
+        // to prevent duplication
+        //
+        // Since the issue name is sufficient to identify our issues as different,
+        // if both issues have the same name, only report the existing issue
+        // otherwise report both issues
+        if (existingIssue.getIssueName().equals(newIssue.getIssueName()))
+            return -1;
+        else return 0;
+    }
+}
+
+//
+// 基于IScanIssue实现一个类，用于存储漏洞的详细信息。
+//
+class CustomScanIssue implements IScanIssue
+{
+    private IHttpService httpService;
+    private URL url;
+    private IHttpRequestResponse[] httpMessages;
+    private String name;
+    private String detail;
+    private String severity;
+
+    public CustomScanIssue(
+            IHttpService httpService,
+            URL url, 
+            IHttpRequestResponse[] httpMessages, 
+            String name,
+            String detail,
+            String severity)
+    {
+        this.httpService = httpService;
+        this.url = url;
+        this.httpMessages = httpMessages;
+        this.name = name;
+        this.detail = detail;
+        this.severity = severity;
+    }
+    
+    @Override
+    public URL getUrl()
+    {
+        return url;
+    }
+
+    @Override
+    public String getIssueName()
+    {
+        return name;
+    }
+
+    @Override
+    public int getIssueType()
+    {
+        return 0;
+    }
+
+    @Override
+    public String getSeverity()
+    {
+        return severity;
+    }
+
+    @Override
+    public String getConfidence()
+    {
+        return "Certain";
+    }
+
+    @Override
+    public String getIssueBackground()
+    {
+        return null;
+    }
+
+    @Override
+    public String getRemediationBackground()
+    {
+        return null;
+    }
+
+    @Override
+    public String getIssueDetail()
+    {
+        return detail;
+    }
+
+    @Override
+    public String getRemediationDetail()
+    {
+        return null;
+    }
+
+    @Override
+    public IHttpRequestResponse[] getHttpMessages()
+    {
+        return httpMessages;
+    }
+
+    @Override
+    public IHttpService getHttpService()
+    {
+        return httpService;
+    }
+    
+}
+```
+
+
+
 ### 扫描插件中更新请求的方法
 
 ```java
 String paraName = insertionPoint.getInsertionPointName(); //实在就是参数名
 String paraValue = insertionPoint.getBaseValue();//实质就是原始值
 byte[] modifiedRawRequest = insertionPoint.buildRequest(payload.getBytes());//用payload的值【替换】原始的值；
-//insertionPoint可以是参数值、整个body、新增的URL参数、新增的body参数；但没有定义【参数名】的注入点，如果想要用payload替换参数名，就需要自己实现了（通过更改参数的方式），
+//insertionPoint可以是参数值、整个body、新增的URL参数、新增的body参数；但没有定义【参数名】的注入点，如果想要用payload替换参数名，就需要自己实现了（通过更改参数的方式）
 
 long sendTime = System.currentTimeMillis();
 IHttpRequestResponse checkRequestResponse = callbacks.makeHttpRequest(
@@ -1462,23 +1700,182 @@ baseRequestResponse.getHttpService(), modifiedRawRequest);
 
 
 
-iscanissue
-
 ## 自定义扫描插入点
-
-为什么需要自定义插入点
-
-![image-20201229105908520](img/README/image-20201229105908520.png)
 
 https://github.com/PortSwigger/example-custom-scan-insertion-points
 
-https://github.com/PortSwigger/example-scanner-checks
+为什么需要自定义插入点? 比如下图的参数，多个查询值被合并放入了一个HTTP请求的参数中，burp默认将一个HTTP参数作为一个插入点的。
+
+![image-20201229105908520](img/README/image-20201229105908520.png)
+
+![image-20210807230134342](README.assets/image-20210807230134342.png)
+
+```java
+package burp;
+
+import java.util.ArrayList;
+import java.util.List;
+
+//from https://github.com/PortSwigger/example-custom-scan-insertion-points/blob/master/java/BurpExtender.java
+//!!!要使用这个文件中的代码，需要先将文件名改为BurpExtender.java
+public class BurpExtender implements IBurpExtender, IScannerInsertionPointProvider
+{
+    private IExtensionHelpers helpers;
+    
+    @Override
+    public void registerExtenderCallbacks(final IBurpExtenderCallbacks callbacks)
+    {
+        helpers = callbacks.getHelpers();
+        callbacks.setExtensionName("Serialized input scan insertion point");
+        callbacks.registerScannerInsertionPointProvider(this);
+    }
+
+    //
+    // implement IScannerInsertionPointProvider
+    //
+    
+    @Override
+    public List<IScannerInsertionPoint> getInsertionPoints(IHttpRequestResponse baseRequestResponse)
+    {
+        // retrieve the data parameter
+        IParameter dataParameter = helpers.getRequestParameter(baseRequestResponse.getRequest(), "data");
+        if (dataParameter == null)
+            return null;
+        
+        // if the parameter is present, add a single custom insertion point for it
+        List<IScannerInsertionPoint> insertionPoints = new ArrayList<IScannerInsertionPoint>();
+        insertionPoints.add(new InsertionPoint(baseRequestResponse.getRequest(), dataParameter.getValue()));
+        return insertionPoints;
+    }
+
+    //
+    // class implementing IScannerInsertionPoint
+    //
+    private class InsertionPoint implements IScannerInsertionPoint
+    {
+        private byte[] baseRequest;
+        private String insertionPointPrefix;
+        private String baseValue;
+        private String insertionPointSuffix;
+
+        InsertionPoint(byte[] baseRequest, String dataParameter)
+        {
+            this.baseRequest = baseRequest;
+            
+            // URL解码、base64解码后的字符串，类似这样 input=1111&time=1628326168221
+            dataParameter = helpers.bytesToString(helpers.base64Decode(helpers.urlDecode(dataParameter)));
+
+            // 解析input字符串的位置 
+            int start = dataParameter.indexOf("input=") + 6;
+            insertionPointPrefix = dataParameter.substring(0, start);
+            int end = dataParameter.indexOf("&", start);
+            if (end == -1)
+                end = dataParameter.length();
+            baseValue = dataParameter.substring(start, end);
+            insertionPointSuffix = dataParameter.substring(end, dataParameter.length());
+        }
+
+        // 
+        // implement IScannerInsertionPoint
+        //
+        
+        @Override
+        public String getInsertionPointName()
+        {
+            return "Base64-wrapped input";
+        }
+
+        @Override
+        public String getBaseValue()
+        {
+            return baseValue;
+        }
+
+        @Override
+        public byte[] buildRequest(byte[] payload)
+        {
+            // 构造扫描时插入payload的请求
+            String input = insertionPointPrefix + helpers.bytesToString(payload) + insertionPointSuffix;
+            
+            // base64编码+URL编码
+            input = helpers.urlEncode(helpers.base64Encode(input));
+            
+            // 用新的请求参数来更新请求数据包
+            return helpers.updateParameter(baseRequest, helpers.buildParameter("data", input, IParameter.PARAM_BODY));
+        }
+
+        @Override
+        public int[] getPayloadOffsets(byte[] payload)
+        {
+            // since the payload is being inserted into a serialized data structure, there aren't any offsets 
+            // into the request where the payload literally appears
+            return null;
+        }
+
+        @Override
+        public byte getInsertionPointType()
+        {
+            return INS_EXTENSION_PROVIDED;
+        }
+    }
+}
+```
+
+
 
 ## 如何与burp自生DNSlog进行交互
+
+IBurpCollaboratorClientContext
+
+IBurpCollaboratorInteraction 
+
+```java
+IBurpCollaboratorClientContext ccc = callbacks.createBurpCollaboratorClientContext();
+
+//返回结果类似：053bsqoev8gezev8oq59zylgv71xpm, 053bsqoev8gezev8oq59zylgv71xpm.burpcollaborator.net
+public static String[] getFullDnsDomain(){
+    String subdomain = ccc.generatePayload(false);
+    String interactionID = subdomain;
+    String server = ccc.getCollaboratorServerLocation();
+    String fullPayload = subdomain+"."+server;
+    String[] result = {interactionID,fullPayload};
+    return result;
+}
+```
 
 
 
 ## 开发一个复杂的扫描插件，要注意什么？
+
+1、如何减少重复请求？
+
+我们可以根据请求数量的多少，将扫描分为三类：HOST级别、URL级别、参数级别。如果想要减少请求的发送，就需要对其进行记录。
+
+2、使用了DNSlog如何进行记录和判断？
+
+如果payload不是很多，可以在发送请求后，通过sleep一段事件然后进行查询。如果大量使用，基于失效考虑最好自己创建一个单独的进程，后台持续处理。这一参考 https://github.com/nccgroup/freddy/blob/master/src/nb/freddy/FreddyCollaboratorThread.java
+
+
+
+## 一些tips
+
+1. buildRequest是在原始值后追加，还是替换原始值？
+
+   	byte[] requsetbyte = insertionPoint.buildRequest((insertionPoint.getBaseValue()+payload).getBytes());
+   	//buildRequest是在原始值后追加，还是替换原始值？ 经测试是替换！！！当然自定义插入点中可以自己控制
+
+2. burp插件开发中，子类异常不要使用system.exit(0)，否则整个burp都将退出！
+
+
+
+3. 添加issue时有2种方法（还是强烈建议使用issues.add的方法！！！避免漏报！）
+
+   ```
+   1、 通过callbacks.addScanIssue ，这种方法添加的issue，中不会包含当前插入点。适合用于url级别、host级别的扫描。burp官网不建议使用的方法，通过它添加的漏洞，不会在scanqueue中有记录！！！【在实际的debug测试中还出现过明明调用成功，却发现连target中都没有记录的情况！！！】
+   2、 通过创建List<IScanIssue> issues = new ArrayList<>(); 然后在函数结尾返回这个list，然后会由burp进行issue的添加，这个适合burp是知道当前插入点的，会包含插入点名称。    这是burp建议的添加漏洞的方法，实际测试它也是有优势的！通过它上报的漏洞会在【scanqueue和 target】中都有记录。而且这个方法的整体逻辑中有自动判断去重的能力！唯一的缺点就是始终包含插入点信息！
+   ```
+
+4、如果请求的状态是500，burp默认不会调用主动扫描doActiveScan()！！！有一种INS_ENTIRE_BODY插入点，但是不是每种情况都会进行这个类型的扫描。综上，burp本身有某种逻辑，会来减少某种类型的扫描。这种逻辑在某些情况下会导致某些漏报。
 
 
 
@@ -1490,31 +1887,5 @@ https://github.com/PortSwigger/example-intruder-payloads
 
 
 
-# 十二、插件配置的保存
-
-
-
-
-
-### 一些小的点
-
-1. buildRequest是在原始值后追加，还是替换原始值？
-
-   	byte[] requsetbyte = insertionPoint.buildRequest((insertionPoint.getBaseValue()+payload).getBytes());
-   	//buildRequest是在原始值后追加，还是替换原始值？ 经测试是替换！！！
-
-2. burp插件开发中，子类异常不要使用system.exit(0)，否则整个burp都将退出！
-
-
-
-3. 添加issue时有2种方法（还是强烈建议使用issues.add的方法！！！避免漏报！）
-
-   ```
-   1、 通过callbacks.addScanIssue ，这种方法添加的issue，中不会包含当前插入点。适合用于url级别、host级别的扫描。
-       burp官网不建议使用的方法，通过它添加的漏洞，不会在scanqueue中有记录！！！【在实际的debug测试中还出现过明明调用成功，却发现连target中都没有记录的情况！！！】
-   2、 通过创建List<IScanIssue> issues = new ArrayList<>(); 然后在函数结尾返回这个list，然后会由burp进行issue的添加，这个适合burp是知道当前插入点的，会包含插入点名称。    这是burp建议的添加漏洞的方法，实际测试它也是有优势的！通过它上报的漏洞会在【scanqueue和 target】中都有记录。而且这个方法的整体逻辑中有自动判断去重的能力！唯一的缺点就是始终包含插入点信息！
-   
-   3、值得注意的是，在我自己修改的J2EEScan中，由于通过数据组
-   
-   ```
+# 十二、插件配置的保存和其他
 
