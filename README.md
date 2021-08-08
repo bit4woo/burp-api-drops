@@ -2049,6 +2049,9 @@ public Config FromJson(String json){
 
 https://www.liaoxuefeng.com/wiki/1252599548343744/1321748435828770
 
+https://github.com/bit4woo/domain_hunter_pro/blob/master/src/burp/DBHelper.java
+
 ### 关注我的GitHub
 
 https://github.com/bit4woo
+
