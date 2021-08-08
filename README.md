@@ -4,25 +4,25 @@ API快速索引 ：
 
 | burp api                         | 相关课程                                         | 示例代码                                                     |
 | -------------------------------- | ------------------------------------------------ | ------------------------------------------------------------ |
-| IBurpCollaboratorClientContext   | 十、自定义扫描插件的开发                         |                                                              |
-| IBurpCollaboratorInteraction     | 十、自定义扫描插件的开发                         |                                                              |
+| IBurpCollaboratorClientContext   | 十、自定义扫描插件的开发                         | https://github.com/PortSwigger/example-scanner-checks/       |
+| IBurpCollaboratorInteraction     | 十、自定义扫描插件的开发                         | https://github.com/PortSwigger/example-scanner-checks/       |
 | IBurpExtender                    | 二、开发环境准备和Hello World                    | https://github.com/PortSwigger/example-hello-world           |
 | IBurpExtenderCallbacks           | 二、开发环境准备和Hello World                    | https://github.com/PortSwigger/example-hello-world           |
 | IContextMenuFactory              | 六、访问burp中的关键数据                         | https://github.com/bit4woo/knife<br />https://github.com/bit4woo/burp-api-drops/blob/master/src/burp/Lession6.java |
 | IContextMenuInvocation           | 六、访问burp中的关键数据                         | https://github.com/bit4woo/knife<br />https://github.com/bit4woo/burp-api-drops/blob/master/src/burp/Lession6.java |
 | ICookie                          |                                                  |                                                              |
-| IExtensionHelpers                | 五、HTTP数据包的处理                             |                                                              |
+| IExtensionHelpers                | 五、HTTP数据包的处理                             | https://github.com/PortSwigger/example-traffic-redirector<br />https://github.com/PortSwigger/custom-logger |
 | IExtensionStateListener          |                                                  | https://github.com/PortSwigger/example-event-listeners       |
 | IHttpListener                    | 四、学习思路和核心逻辑<br />五、HTTP数据包的处理 | https://github.com/PortSwigger/example-event-listeners<br />https://github.com/PortSwigger/custom-logger |
 | IHttpRequestResponse             | 五、HTTP数据包的处理                             | https://github.com/PortSwigger/example-traffic-redirector<br />https://github.com/PortSwigger/custom-logger |
 | IHttpRequestResponsePersisted    |                                                  |                                                              |
-| IHttpRequestResponseWithMarkers  | 十、自定义扫描插件的开发                         |                                                              |
+| IHttpRequestResponseWithMarkers  | 十、自定义扫描插件的开发                         | https://github.com/PortSwigger/example-scanner-checks/       |
 | IHttpService                     | 五、HTTP数据包的处理                             | https://github.com/PortSwigger/example-traffic-redirector    |
-| IInterceptedProxyMessage         |                                                  |                                                              |
+| IInterceptedProxyMessage         |                                                  | https://github.com/bit4woo/knife/blob/master/src/burp/BurpExtender.java |
 | IIntruderAttack                  |                                                  |                                                              |
-| IIntruderPayloadGenerator        |                                                  | https://github.com/PortSwigger/example-intruder-payloads     |
-| IIntruderPayloadGeneratorFactory |                                                  | https://github.com/PortSwigger/example-intruder-payloads     |
-| IIntruderPayloadProcessor        |                                                  | https://github.com/PortSwigger/example-intruder-payloads     |
+| IIntruderPayloadGenerator        | 十一、自定义Intruder Payloads                    | https://github.com/PortSwigger/example-intruder-payloads<br />https://github.com/bit4woo/reCAPTCHA |
+| IIntruderPayloadGeneratorFactory | 十一、自定义Intruder Payloads                    | https://github.com/PortSwigger/example-intruder-payloads<br />https://github.com/bit4woo/reCAPTCHA |
+| IIntruderPayloadProcessor        | 十一、自定义Intruder Payloads                    | https://github.com/PortSwigger/example-intruder-payloads<br />https://github.com/bit4woo/reCAPTCHA |
 | IMenuItemHandler                 |                                                  |                                                              |
 | IMessageEditor                   | 八、IMessageEditorTab                            | https://github.com/PortSwigger/custom-logger                 |
 | IMessageEditorController         | 八、IMessageEditorTab                            | https://github.com/PortSwigger/custom-logger                 |
@@ -30,8 +30,8 @@ API快速索引 ：
 | IMessageEditorTabFactory         | 八、IMessageEditorTab                            | https://github.com/bit4woo/u2c<br />https://github.com/PortSwigger/example-custom-editor-tab |
 | IParameter                       | 五、HTTP数据包的处理                             |                                                              |
 | IProxyListener                   |                                                  | https://github.com/PortSwigger/example-event-listeners       |
-| IRequestInfo                     | 五、HTTP数据包的处理                             |                                                              |
-| IResponseInfo                    | 五、HTTP数据包的处理                             |                                                              |
+| IRequestInfo                     | 五、HTTP数据包的处理                             | https://github.com/bit4woo/burp-api-drops/blob/master/src/burp/Lession5.java |
+| IResponseInfo                    | 五、HTTP数据包的处理                             | https://github.com/bit4woo/burp-api-drops/blob/master/src/burp/Lession5.java |
 | IResponseKeywords                |                                                  |                                                              |
 | IResponseVariations              |                                                  |                                                              |
 | IScanIssue                       | 十、自定义扫描插件的开发                         | https://github.com/PortSwigger/example-scanner-checks        |
@@ -43,7 +43,7 @@ API快速索引 ：
 | IScopeChangeListener             |                                                  |                                                              |
 | ISessionHandlingAction           | 七、ISessionHandlingAction的使用                 | https://github.com/PortSwigger/example-custom-session-tokens<br />https://github.com/bit4woo/burp-api-drops/blob/master/src/burp/Lession7.java |
 | ITab                             | 九、自定义UI界面                                 | https://github.com/PortSwigger/custom-logger                 |
-| ITempFile                        |                                                  |                                                              |
+| ITempFile                        | 十二、插件配置的保存和其他                       |                                                              |
 | ITextEditor                      |                                                  |                                                              |
 
 
@@ -1518,7 +1518,7 @@ public class BurpExtender implements IBurpExtender, IScannerCheck
     // 实现 IScannerCheck接口的函数
     //
     
-    @Override
+    @Override //被动扫描中，强烈建议不要发送请求！
     public List<IScanIssue> doPassiveScan(IHttpRequestResponse baseRequestResponse)
     {
         //被动扫描，仅仅对响应包进行字符串匹配。
@@ -1685,7 +1685,7 @@ class CustomScanIssue implements IScanIssue
 
 
 
-### 扫描插件中更新请求的方法
+## 扫描插件中更新请求的方法
 
 ```java
 String paraName = insertionPoint.getInsertionPointName(); //实在就是参数名
@@ -1881,11 +1881,174 @@ public static String[] getFullDnsDomain(){
 
 # 十一、自定义Intruder Payloads
 
-Provide custom Intruder payloads and payload processors.
+提供自定义的爆破Payload和Payload处理器。
 
 https://github.com/PortSwigger/example-intruder-payloads
+
+```java
+package burp;
+
+import burp.BurpExtender.IntruderPayloadGenerator;
+
+//https://github.com/PortSwigger/example-intruder-payloads/blob/master/java/BurpExtender.java
+//!!!要使用这个文件中的代码，需要先将文件名改为BurpExtender.java
+public class BurpExtender implements IBurpExtender, IIntruderPayloadGeneratorFactory, IIntruderPayloadProcessor
+{
+    private IExtensionHelpers helpers;
+    
+    // 这里是硬编码的payload，实际情况中，我们要根据自己的需求来设置。
+    private static final byte[][] PAYLOADS = 
+    {
+        "|".getBytes(),
+        "<script>alert(1)</script>".getBytes(),
+    };
+
+    //
+    // implement IBurpExtender
+    //
+    
+    @Override
+    public void registerExtenderCallbacks(final IBurpExtenderCallbacks callbacks)
+    {
+        helpers = callbacks.getHelpers();
+        callbacks.setExtensionName("Custom intruder payloads");
+        callbacks.registerIntruderPayloadGeneratorFactory(this);
+        callbacks.registerIntruderPayloadProcessor(this);
+    }
+
+    //
+    // implement IIntruderPayloadGeneratorFactory
+    //
+    
+    @Override
+    public String getGeneratorName()
+    {
+        return "My custom payloads";
+    }
+
+    @Override
+    public IIntruderPayloadGenerator createNewInstance(IIntruderAttack attack)
+    {
+        // return a new IIntruderPayloadGenerator to generate payloads for this attack
+        return new IntruderPayloadGenerator();
+    }
+
+    //
+    // implement IIntruderPayloadProcessor
+    //
+    
+    @Override
+    public String getProcessorName()
+    {
+        return "Serialized input wrapper";
+    }
+    
+    /**
+     * 对payload的原始值进行处理，比如编码、转换等。这里就是base64编码
+     * 返回的是直接可以用于替换的请求包中内容的payload
+     */
+    @Override
+    public byte[] processPayload(byte[] currentPayload, byte[] originalPayload, byte[] baseValue)
+    {
+        // 解码原始值
+        String dataParameter = helpers.bytesToString(helpers.base64Decode(helpers.urlDecode(baseValue)));
+        
+        // 解析 input这个字符串的位置
+        int start = dataParameter.indexOf("input=") + 6;
+        if (start == -1)
+            return currentPayload;
+        String prefix = dataParameter.substring(0, start);//获取前半部分
+        int end = dataParameter.indexOf("&", start);
+        if (end == -1)
+            end = dataParameter.length();
+        String suffix = dataParameter.substring(end, dataParameter.length());//获取后半部分
+        
+        // 使用payload的值，重新拼接
+        dataParameter = prefix + helpers.bytesToString(currentPayload) + suffix;
+        return helpers.stringToBytes(helpers.urlEncode(helpers.base64Encode(dataParameter)));//返回修改后的值
+    }
+    
+    //
+    // class to generate payloads from a simple list
+    //
+    
+    class IntruderPayloadGenerator implements IIntruderPayloadGenerator
+    {
+        int payloadIndex;//当前payload在数组中的位置
+        
+        @Override
+        public boolean hasMorePayloads()
+        {
+            return payloadIndex < PAYLOADS.length;
+        }
+
+        @Override
+        public byte[] getNextPayload(byte[] baseValue)
+        {
+            byte[] payload = PAYLOADS[payloadIndex];
+            payloadIndex++;
+            return payload;
+        }
+
+        @Override
+        public void reset()
+        {
+            payloadIndex = 0;
+        }
+    }
+}
+```
 
 
 
 # 十二、插件配置的保存和其他
 
+### 数据保存到临时文件
+
+```java
+callbacks.saveToTempFile("testString".getByte());
+```
+
+### 数据保存到插件配置 saveExtensionSetting
+
+```java
+这个函数可以帮助在插件退出或加载时，进行数据的保存和读取，避免每次启用插件都需要重新手动价值数据。
+    
+callbacks.saveExtensionSetting("knifeconfig", getAllConfig());
+
+String content = callbacks.loadExtensionSetting("knifeconfig");
+```
+
+### 数据转换为JSON
+
+用于将对象序列化成JSON格式或者反序列化为对象，利于实现数据的保存。
+
+```java
+//使用alibaba的fastjson
+public String ToJson(){//注意函数名称，如果是get set开头，会被认为是Getter和Setter函数，会在序列化过程中被调用。
+    return JSON.toJSONString(this);
+}
+
+public static LineEntry FromJson(String json){//注意函数名称，如果是get set开头，会被认为是Getter和Setter函数，会在序列化过程中被调用。
+    return JSON.parseObject(json, LineEntry.class);
+}
+
+//使用google的Gson
+public String ToJson(){
+    return new Gson().toJson(this);
+}
+
+public Config FromJson(String json){
+    return new Gson().fromJson(json, Config.class);
+}
+```
+
+### 数据保存到数据库
+
+如果数据量更大，那么就超出了对象转JSON的范畴，就需要使用数据库。
+
+https://www.liaoxuefeng.com/wiki/1252599548343744/1321748435828770
+
+### 关注我的GitHub
+
+https://github.com/bit4woo
